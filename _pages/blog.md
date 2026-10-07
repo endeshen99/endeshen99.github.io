@@ -189,6 +189,10 @@ pagination:
 
   </ul>
 
+{% if postlist.size == 0 %}
+  <p class="post-description">No posts yet. Writing on robot learning and verifiable ML is coming.</p>
+{% endif %}
+
 {% if page.pagination.enabled %}
 {% include pagination.liquid %}
 {% endif %}
