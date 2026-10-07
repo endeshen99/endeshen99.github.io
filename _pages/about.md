@@ -31,8 +31,6 @@ I did my B.S. and M.S. in Computer Science at Stanford, where I worked on faithf
 
 #### On my mind
 
-<!-- TODO: replace these placeholder questions with your own. -->
-
-- Which safety-relevant behaviors in a VLA are most fragile under continued fine-tuning, and can we predict that before training?
-- When a robot learns from its own rollouts, what does it quietly unlearn?
-- What would a useful certificate of "this policy will not do X" even look like?
+- Can we tell from a VLA's internals what fine-tuning will erase before it happens?
+- Do the safety behaviors trained into robot foundation models survive the routine fine-tuning that happens after deployment?
+- Should self-improvement methods be judged by a frozen benchmark score, or by how fast they improve under a fixed budget?
