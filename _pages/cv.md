@@ -2,7 +2,7 @@
 layout: page
 permalink: /cv/
 title: CV
-nav: true
+nav: false
 nav_order: 5
 cv_pdf: /assets/pdf/cv.pdf # you can also use external links here
 description: My CV as a PDF. If the embedded viewer does not load, use the download link.

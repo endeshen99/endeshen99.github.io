@@ -1,6 +1,5 @@
 # Social links shown on the about page and in the footer.
 # Documentation: https://github.com/george-gca/jekyll-socials
-cv_pdf: /assets/pdf/cv.pdf # path to your CV PDF file
 email: endeshen99@gmail.com # your email address
 github_username: endeshen99 # your GitHub user name
 rss_icon: true # comment this line to hide the RSS icon
