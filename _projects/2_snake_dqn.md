@@ -1,7 +1,7 @@
 ---
 layout: page
-title: SlitheRL
-description: A tensorized multiplayer Snake environment for deep Q-learning (with Kaiying Hou, 2021)
+title: Tensorized multiplayer Snake environment for deep Q-learning
+description: Batched Snake games as tensors, so a DQN agent can self-play without a Python-loop bottleneck (with Kaiying Hou, 2021)
 img: # TODO: add a preview image
 importance: 2
 related_publications: false
