@@ -209,3 +209,23 @@ html[data-theme-setting="light"] {
 #light-toggle:hover .fa-half-sun-moon::after {
   color: var(--global-theme-color);
 }
+
+/*******************************************************************************
+ * Site additions (not in the upstream partial)
+ ******************************************************************************/
+
+// Outlined, neutral badge for work that is under review, so it reads as
+// distinct from the solid accent badges used for published venues.
+:root {
+  --global-badge-muted-color: #595959;
+}
+
+html[data-theme="dark"] {
+  --global-badge-muted-color: #a6a6a6;
+}
+
+.publications ol.bibliography li .abbr abbr.badge-under-review {
+  background-color: transparent;
+  box-shadow: inset 0 0 0 1px var(--global-badge-muted-color); // keeps the same box size as the filled badges
+  color: var(--global-badge-muted-color) !important;
+}
