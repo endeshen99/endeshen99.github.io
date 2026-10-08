@@ -7,6 +7,7 @@ subtitle: Independent researcher · robot learning
 profile:
   align: right
   image: prof_pic.jpg
+  alt: Ende Shen # alt text for the profile photo
   image_circular: false # crops the image to make it circular
 
 selected_papers: true # includes a list of papers marked as "selected={true}"
