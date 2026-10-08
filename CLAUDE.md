@@ -22,8 +22,8 @@ bundle exec al-folio upgrade overrides diff <path>    # then `overrides accept <
 
 ## Optional toolchains
 
-- **Jupyter posts.** `bin/setup-python-deps` installs _only_ `jupyter` and `nbconvert` (via `pip --user --break-system-packages`) for `jekyll-jupyter-notebook`. It does **not** read `requirements.txt`. Missing `jupyter-nbconvert` is warn-and-continue; notebook rendering is skipped.
-- **Everything else Python.** [`requirements.txt`](requirements.txt) is the fuller list and must be installed separately (`python3 -m pip install -r requirements.txt`): `rendercv[full]` for CV rendering, `scholarly` for `bin/update_scholar_citations.py`, plus `nbconvert` and `pyyaml`.
+- **Jupyter posts.** Not used on this site: `jekyll-jupyter-notebook` and the `bin/setup-python-deps` helper were removed. Re-add the gem to both `Gemfile` and `_config.yml` and install `jupyter`+`nbconvert` if notebook posts come back.
+- **Everything else Python.** [`requirements.txt`](requirements.txt) is the fuller list and must be installed separately (`python3 -m pip install -r requirements.txt`): `rendercv[full]` for CV rendering, `scholarly` for `bin/update_scholar_citations.py`, plus `pyyaml`.
 - **Responsive images.** `imagemagick.enabled: true` needs ImageMagick `convert` on `PATH`.
 - **Manual deploy.** `bin/deploy` is the manual `gh-pages` build + purgecss + force-push path; CI normally deploys. `purgecss` is not a devDependency — install it with `npm install -g purgecss`.
 
