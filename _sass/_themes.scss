@@ -85,7 +85,7 @@ html[data-theme="dark"] {
   --global-text-color-light: #{v.$grey-color};
   --global-theme-color: #{v.$cyan-color};
   --global-hover-color: #{v.$cyan-color};
-  --global-hover-text-color: #{v.$white-color};
+  --global-hover-text-color: #{v.$grey-color-dark}; // site override: dark text on accent fills for 4.5:1 contrast
   --global-footer-bg-color: #{v.$grey-color-light};
   --global-footer-text-color: #{v.$grey-color-dark};
   --global-footer-link-color: #{v.$black-color};
