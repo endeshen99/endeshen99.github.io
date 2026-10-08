@@ -2,7 +2,7 @@
 # Documentation: https://github.com/george-gca/jekyll-socials
 email: endeshen99@gmail.com # your email address
 github_username: endeshen99 # your GitHub user name
-rss_icon: true # comment this line to hide the RSS icon
+# rss_icon: true # hidden until the first post exists; uncomment to show the RSS icon
 scholar_userid: 5Hi8OdsAAAAJ # your Google Scholar ID
 # x_username: # your X handle
 # huggingface_username: endeshen # your Hugging Face user name
