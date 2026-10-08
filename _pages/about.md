@@ -30,7 +30,7 @@ Before robotics, I worked on zero-knowledge proofs for machine learning, as a cr
 
 I did my B.S. and M.S. in Computer Science at Stanford, where I worked on text generation with [Tianyi Zhang](https://tiiiger.github.io/) in [Tatsu Hashimoto](https://thashim.github.io/)'s group.
 
-#### On my mind
+#### on my mind
 
 - Can we tell from a VLA's internals what fine-tuning will erase before it happens?
 - If safety behaviors don't survive routine fine-tuning, what would make them durable, and how would we check that they did?
