@@ -25,7 +25,7 @@ latest_posts:
 
 I'm an independent researcher in San Francisco working on robot learning. I study what happens to vision-language-action (VLA) models when they keep learning after deployment: which behaviors survive fine-tuning, which are silently lost, and what that means for safety. I run experiments on π0.5, both in simulation and on a low-cost real arm.
 
-My background is in verifiable ML. As Staff Cryptographer at Modulus Labs, I built Remainder, a zero-knowledge proving system for ML inference, and at Tools for Humanity I implemented MPC proofs for a system serving ~22M users. I also founded Tegore (YC S25), a real-time voice tutor for K-12 math. The thread through all of it: how do we know what a system will do before it acts?
+My background is in verifiable ML. As Staff Cryptographer at Modulus Labs, I built Remainder, a zero-knowledge proving system for ML inference, and at Tools for Humanity I implemented MPC proofs for a system serving ~22M users. I also founded Tegore (YC X25), a real-time voice tutor for K-12 math. The thread through all of it: how do we know what a system will do before it acts?
 
 I did my B.S. and M.S. in Computer Science at Stanford, where I worked on faithful text generation in Tatsu Hashimoto's group.
 
