@@ -2,7 +2,7 @@
 layout: about
 title: about
 permalink: /
-subtitle: Independent researcher · continual learning & safety for robots
+subtitle: Independent researcher · continual learning and safety for robots
 
 profile:
   align: right
