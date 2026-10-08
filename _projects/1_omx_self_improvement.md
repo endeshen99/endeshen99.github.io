@@ -5,6 +5,7 @@ description: Fine-tuning π0.5 on its own rollouts with a low-cost arm (in progr
 img: # TODO: add a preview image, e.g. assets/img/omx_arm.jpg
 importance: 1
 related_publications: false
+sitemap: false # hidden until project videos are ready
 ---
 
 An ongoing study of what a vision-language-action model gains and loses when it keeps learning after deployment, run on a real OpenMANIPULATOR-X arm rather than in simulation. The policy is π0.5, fine-tuned on a case-to-mug pick-and-place task, then fine-tuned again on its own self-generated rollouts.

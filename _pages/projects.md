@@ -3,8 +3,9 @@ layout: page
 title: projects
 permalink: /projects/
 description: Things I have built, from robot learning experiments to RL environments.
-nav: true
+nav: false # hidden until project videos are ready
 nav_order: 3
+sitemap: false
 horizontal: false
 ---
 

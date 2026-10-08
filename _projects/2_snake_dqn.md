@@ -5,6 +5,7 @@ description: Batched Snake games as tensors, so a DQN agent can self-play withou
 img: # TODO: add a preview image
 importance: 2
 related_publications: false
+sitemap: false # hidden until project videos are ready
 ---
 
 A multiplayer Snake environment written to run many games at once as batched tensors, so a deep Q-learning agent can train against itself and other agents without a Python-loop bottleneck. Built with Kaiying Hou in 2021.
