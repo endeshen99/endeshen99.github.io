@@ -33,5 +33,5 @@ I did my B.S. and M.S. in Computer Science at Stanford, where I worked on text g
 #### On my mind
 
 - Can we tell from a VLA's internals what fine-tuning will erase before it happens?
-- Do the safety behaviors trained into robot foundation models survive the routine fine-tuning that happens after deployment?
+- If safety behaviors don't survive routine fine-tuning, what would make them durable, and how would we check that they did?
 - Should self-improvement methods be judged by a frozen benchmark score, or by how fast they improve under a fixed budget?
