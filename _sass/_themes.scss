@@ -299,7 +299,7 @@ body.sticky-bottom-footer {
   // Optical alignment: the title's large glyphs carry side bearing, so pull it
   // left a touch to line up with the date; then set the date slightly apart.
   .post-title {
-    margin-left: -0.04em;
+    margin-left: -0.02em; // measured: puts the S and O ink edges on the same pixel
   }
 
   .post-meta {
