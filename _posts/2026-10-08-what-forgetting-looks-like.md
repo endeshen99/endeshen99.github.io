@@ -10,13 +10,15 @@ giscus_comments: false
 related_posts: false
 ---
 
-<p class="post-tldr"><strong>TL;DR</strong> I fine-tuned a robot policy on a new task with 50 human demonstrations and tracked a skill it already had. The old skill was gone before the new one arrived: its success fell from 0.70 to 0.14 after 100 steps and to 0.00 after 200, while the new task only began improving around step 1,060. Neither early stopping nor a lower learning rate could save it. Drift from the starting policy didn’t predict the loss either: at step 100, the policy was about as close to the start as runs that kept the skill. Training on the policy’s own rollouts, with the same objective and budget, did not forget, so the forgetting comes from the data, not the training objective.</p>
+<p class="post-tldr"><strong>TL;DR</strong> I fine-tuned a robot policy on a new task with 50 human demonstrations and tracked a skill it already had. The old skill was gone before the new one arrived: its success fell from 0.70 to 0.14 after 100 steps and to 0.00 after 200, while the new task only began improving around step 1,060, so neither early stopping nor a lower learning rate could save it. Drift from the starting policy, the kind of measure that predicts forgetting in language models, didn’t catch the early loss either.</p>
+
+<p class="post-tldr">In language models, on-policy RL forgets less than supervised fine-tuning (SFT), and the gap has been traced to the data rather than the algorithm. As a control, I ran SFT on the policy’s own successful rollouts. The same supervised updates didn’t erase the old skill this time, suggesting that data close to the policy’s own behavior limits forgetting, and that RL isn’t the only way to avoid it. But these rollouts also barely improved the new task, so they aren’t a recipe on their own. To separate the two effects, the next step is data that stays close to the policy but still teaches: the robot’s own attempts, corrected by a stronger model or a human only where it fails. I leave that for future work.</p>
 
 <hr class="post-rule">
 
 A robotics founder once told me about a customer whose towel-folding robots were working well, and who then asked them to also set aside towels that were slightly dirty. Requests like that are the norm once robots leave the lab: a model that went through extensive pretraining has to pick up small new skills quickly, without losing the ones it already has.
 
-Recent work found that on-policy reinforcement learning (RL) forgets far less than supervised fine-tuning on vision-language-action (VLA) models.&nbsp;<a class="cite" href="#ref-1">[1]</a> In language models, that difference has been traced to the data RL trains on, sampled from the model itself, rather than to the RL objective.&nbsp;<a class="cite" href="#ref-2">[2]</a> I wanted to see what that forgetting actually looks like on a robot policy.
+Recent work found that on-policy reinforcement learning (RL) forgets far less than supervised fine-tuning on vision-language-action (VLA) models.&nbsp;<a class="cite" href="#ref-1">[1]</a> In language models, that difference has been traced to the data RL trains on, sampled from the model itself, rather than to the RL objective.&nbsp;<a class="cite" href="#ref-2">[2]</a> I wanted to look at this on a robot policy: I held the training objective fixed, changed only the data, and looked closely at how the forgetting unfolds.
 
 ## The setup
 
