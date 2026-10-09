@@ -10,7 +10,11 @@ giscus_comments: false
 related_posts: false
 ---
 
-<p class="post-tldr"><strong>TL;DR</strong> I took a robot policy trained to avoid obstacles and fine-tuned it on ordinary task demonstrations that contained no obstacles. Its collision rate rose from 2.5% to 30.8%, while its skill on the original tasks largely held. The avoidance started eroding within the first 200 training steps, before task success dropped. Telling the robot to avoid obstacles did nothing; mixing the safe policy’s own rollouts into training limited the damage, and 200 further steps on them restored it. Learned safety here behaves like a motion habit, so it needs re-testing after every update.</p>
+<p class="post-tldr"><strong>TL;DR</strong> I took a robot policy trained to avoid obstacles and fine-tuned it on task demonstrations that contained no obstacles. Its collision rate rose from 2.5% to 30.8%. The avoidance started eroding within the first 200 training steps, before task success in the obstacle scenes dropped. This hints that learned safety behaviors may be shallower than task skills, and erode faster under fine-tuning pressure.</p>
+
+<p class="post-tldr">I tried three ways to mitigate the safety loss: appending “avoiding the obstacles” to the policy’s language instruction at test time, mixing the safe policy’s own collision-free rollouts into the fine-tuning data, and training the degraded policy further on the original safe policy’s rollouts alone. The first did nothing, the second limited the damage, and the third restored the avoidance almost fully.</p>
+
+<p class="post-tldr">The results suggest this policy learned avoidance as a fragile motion habit rather than a robust semantic concept of obstacles, and that learned safety needs re-evaluation after every update.</p>
 
 <hr class="post-rule">
 
