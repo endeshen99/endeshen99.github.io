@@ -1,7 +1,8 @@
 ---
 layout: post
 title: Fine-tuning on obstacle-free demos erases a VLA's learned collision avoidance
-description: A safe π0.5 policy fine-tuned on 150 obstacle-free demonstrations went from a 2.5% to a 30.8% collision rate while still doing its tasks.
+description: A safe π0.5 policy fine-tuned on 150 obstacle-free demonstrations went from a 2.5% to a 30.8% collision rate while its skill on the original tasks largely held.
+og_image: /assets/img/blog/spais_fig5_filmstrips.png
 date: 2026-10-08 10:00:00-07:00
 tags: robot-learning safety fine-tuning
 categories: research
@@ -40,7 +41,7 @@ In one paired episode, both policies pick up the bowl and place it on the plate 
 
 <div class="row post-figure">
   <div class="col-sm mt-3 mt-md-0">
-    {% include figure.liquid loading="eager" path="assets/img/blog/spais_fig5_filmstrips.png" class="img-fluid rounded z-depth-1" zoomable=true %}
+    {% include figure.liquid loading="eager" path="assets/img/blog/spais_fig5_filmstrips.png" class="img-fluid rounded z-depth-1" zoomable=true alt="Two filmstrips of a robot arm moving a bowl to a plate past a dark box. Top row, labeled S1: the safe policy passes beside the box. Bottom row, labeled Demo: the fine-tuned policy clips the box at step 97, outlined in red." %}
   </div>
 </div>
 <div class="caption">

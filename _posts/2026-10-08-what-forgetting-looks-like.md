@@ -2,6 +2,7 @@
 layout: post
 title: What forgetting looks like when a robot policy is fine-tuned on human demonstrations
 description: A robot policy lost an existing skill within 200 steps of fine-tuning on human demonstrations, before it learned the new task.
+og_image: /assets/img/blog/csir_fig1_learning_curves.png
 date: 2026-10-08 09:00:00-07:00
 tags: robot-learning continual-learning fine-tuning
 categories: research
@@ -48,7 +49,7 @@ In one run I looked at closely, the failures looked less like a forgotten task t
 
 <div class="row post-figure">
   <div class="col-sm mt-3 mt-md-0">
-    {% include figure.liquid loading="eager" path="assets/img/blog/csir_fig1_learning_curves.png" class="img-fluid rounded z-depth-1" zoomable=true %}
+    {% include figure.liquid loading="eager" path="assets/img/blog/csir_fig1_learning_curves.png" class="img-fluid rounded z-depth-1" zoomable=true alt="Two line charts of task success against fine-tuning step. Left, trained on 50 human demonstrations: the old task drops from 0.7 to 0 within 200 steps while the new task rises to 0.7 by step 1590. Right, trained on 143 of the policy's own rollouts: the old task stays near 0.75 and the new task rises modestly to about 0.45." %}
   </div>
 </div>
 <div class="caption">

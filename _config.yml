@@ -9,7 +9,7 @@ last_name: Shen
 contact_note: >
   Email is the best way to reach me.
 description: > # the ">" symbol means to ignore newlines until "footer_text:"
-  Ende Shen is an independent researcher in San Francisco working on robot learning and what happens to vision-language-action models after deployment.
+  Ende Shen is an independent researcher in San Francisco studying continual learning and safety for robot foundation models.
 footer_text: # optional text after the copyright line; left empty so the footer reads "© <year> Ende Shen"
 keywords: Ende Shen, robot learning, vision-language-action, VLA, continual learning, verifiable ML, zero-knowledge proofs
 lang: en # the language of your site (for example: en, fr, cn, ru, etc.)
