@@ -18,13 +18,15 @@ related_posts: false
 
 <hr class="post-rule">
 
-Robot policies are increasingly trained to behave safely: avoid obstacles, keep clear of people. That behavior is usually measured once, on the model as released. But a deployed policy rarely stays as released. Teams fine-tune it on demonstrations of their own tasks, and the safety behavior is assumed to come along.
+Robot foundation models are increasingly deployed in realistic settings, folding laundry in commercial facilities, working in warehouses, and operating around people. In these settings a policy has to behave safely: avoid obstacles, keep clear of people, handle sharp objects with care. Safety behaviors like these are increasingly trained directly into the policy.&nbsp;<a class="cite" href="#ref-1">[1]</a>
 
-For language models, we already know it often doesn't: fine-tuning an aligned model on a small amount of harmless data can erode its refusals.&nbsp;<a class="cite" href="#ref-1">[1]</a> I wanted to know whether the same thing happens to a robot policy.
+But a deployed policy rarely stays as released. Companies adapt it continually, tuning it to each new customer, task, and environment. This matters more for robots than for language models: physical data is far harder to collect than text, so adaptation is constant once a robot is in the field, each update another chance for installed behavior to drift.
+
+For language models, we already know benign updates can erode safety: fine-tuning an aligned model on a small amount of harmless data weakens its refusals.&nbsp;<a class="cite" href="#ref-2">[2]</a> I wanted to know whether the same happens to a robot policy’s learned safety.
 
 ## The setup
 
-I started from a π0.5&nbsp;<a class="cite" href="#ref-2">[2]</a> policy released by LIBERO-Safety&nbsp;<a class="cite" href="#ref-3">[3]</a>, a benchmark that trained it on about 19,700 collision-free demonstrations to steer around obstacles on a tabletop. Call it the safe policy.
+I started from a π0.5&nbsp;<a class="cite" href="#ref-3">[3]</a> policy released by LIBERO-Safety&nbsp;<a class="cite" href="#ref-1">[1]</a>, a benchmark that trained it on about 19,700 collision-free demonstrations to steer around obstacles on a tabletop. Call it the safe policy.
 
 Then I did what a downstream user would do: fine-tuned it on 150 human demonstrations of three of the same tasks (a bowl, a book, and a moka-pot task), in their original scenes, which have no obstacles. Nothing in this data teaches the robot to collide. It just never shows an obstacle.
 
@@ -94,8 +96,8 @@ That representation need not come from language. It could be conditioned on what
 ## References
 
 <ol class="references">
-  <li id="ref-1">Qi et al., “Fine-tuning Aligned Language Models Compromises Safety, Even When Users Do Not Intend To!”, ICLR 2024. <a href="https://arxiv.org/abs/2310.03693">arXiv:2310.03693</a></li>
-  <li id="ref-2">Physical Intelligence, “π0.5: a Vision-Language-Action Model with Open-World Generalization”, arXiv 2025. <a href="https://arxiv.org/abs/2504.16054">arXiv:2504.16054</a></li>
-  <li id="ref-3">Cui et al., “LIBERO-Safety: A Comprehensive Benchmark for Physical and Semantic Safety in Vision-Language-Action Models”, ECCV 2026. <a href="https://arxiv.org/abs/2606.23686">arXiv:2606.23686</a></li>
+  <li id="ref-1">Cui et al., “LIBERO-Safety: A Comprehensive Benchmark for Physical and Semantic Safety in Vision-Language-Action Models”, ECCV 2026. <a href="https://arxiv.org/abs/2606.23686">arXiv:2606.23686</a></li>
+  <li id="ref-2">Qi et al., “Fine-tuning Aligned Language Models Compromises Safety, Even When Users Do Not Intend To!”, ICLR 2024. <a href="https://arxiv.org/abs/2310.03693">arXiv:2310.03693</a></li>
+  <li id="ref-3">Physical Intelligence, “π0.5: a Vision-Language-Action Model with Open-World Generalization”, arXiv 2025. <a href="https://arxiv.org/abs/2504.16054">arXiv:2504.16054</a></li>
   <li id="ref-4">Gu et al., “SAFE: Multitask Failure Detection for Vision-Language-Action Models”, NeurIPS 2025. <a href="https://arxiv.org/abs/2506.09937">arXiv:2506.09937</a></li>
 </ol>
