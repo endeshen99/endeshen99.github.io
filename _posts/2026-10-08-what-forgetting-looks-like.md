@@ -89,8 +89,8 @@ The policy's own data is a simple, safe ingredient, but it has a ceiling. It pro
 
 Replay works, and whose data you replay matters. Mixing the policy's own old-task successes into the demonstrations kept the old skill at 0.70 while learning as much as demonstrations alone. The same share of human demonstrations of the old task kept it only partly (0.59). My guess is that the policy's own rollouts carry the improved version of the skill, while the human demonstrations carry the version from before RL improved it.
 
-The obvious next data to try sits in between: mostly the robot's own behavior, with human corrections only where it fails. If the pattern holds, that should learn faster than own data while forgetting less than demonstrations. I haven't tested it.
+Next, I want to test the data that sits in between: mostly the robot’s own behavior, with simulated human corrections only where it fails. Comparing those trajectories with pure human demonstrations would show whether data that stays close to what the policy already does can teach new tasks without erasing old ones. If the pattern above holds, corrections should learn faster than the policy’s own data while forgetting less than demonstrations.
+
+I’m also curious about scale. Recent work found that pretrained VLAs are [surprisingly resistant to forgetting](https://arxiv.org/abs/2603.03818) in continual learning, yet here 50 demonstrations erased a skill within 200 steps. I’d like to measure directly how resistance to forgetting changes with the size of the pretrained model and the amount of pretraining.
 
 Limits: simulation only, one model family, one old skill tested against three new tasks, and single runs on two of those pairs. The old task also appears in the base model's training data, which may make it easier to retain than a skill the model never saw.
-
-*\[Your note: the next experiment you'd run.\]*
