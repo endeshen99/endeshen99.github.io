@@ -2,7 +2,7 @@
 layout: page
 permalink: /publications/
 title: publications
-description: Papers and preprints. Work under review is listed without venue.
+description: Papers and preprints.
 nav: true
 nav_order: 2
 ---
