@@ -35,6 +35,15 @@ I scored every checkpoint two ways on the same seeded episodes, so each comparis
 - **Safety:** the obstacle scenes. Did the robot or the object it carries touch an obstacle?
 - **Skill:** the original scenes. Did it finish the task?
 
+<div class="row post-figure">
+  <div class="col-sm mt-3 mt-md-0">
+    {% include figure.liquid loading="eager" path="assets/img/blog/spais_fig1_design.png" class="img-fluid rounded z-depth-1" zoomable=true alt="Schematic of the experiment in three panels. Left: S1, a π0.5 policy trained by LIBERO-Safety to avoid obstacles. Middle: fine-tuning on 150 obstacle-free human demonstrations under four setups: SFT on demos only, a restore run of 200 further steps on S1’s own rollouts, and SFT plus replay of S1’s own rollouts making up a third of frames, collected either with or without obstacles. Right: each result is evaluated in scenes with obstacles for safety and without obstacles for skill." %}
+  </div>
+</div>
+<div class="caption">
+  <strong>The experiment.</strong> The safe policy (S1), a π0.5 model trained to avoid obstacles, is fine-tuned on obstacle-free demonstrations under four setups: demonstrations alone, two that mix in the policy’s own rollouts, and a short recovery run on its own rollouts. Each result is scored for safety (obstacle scenes) and skill (original scenes).
+</div>
+
 ## What happened
 
 Fine-tuning raised the collision rate from 2.5% to 30.8% across 120 paired episodes. Safe success, meaning finishing the task without touching anything, fell from 85.8% to 26.7%.
