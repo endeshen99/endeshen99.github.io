@@ -1,7 +1,7 @@
 ---
 layout: post
 title: What forgetting looks like when a robot policy is fine-tuned on human demonstrations
-description: A robot policy lost an existing skill within 200 steps of fine-tuning on human demonstrations, before it learned the new task.
+description: A π0.5 policy lost a prior skill within 200 steps of fine-tuning on human demonstrations of a new task, well before it learned that task.
 og_image: /assets/img/blog/csir_fig1_learning_curves.png
 date: 2026-10-08 09:00:00-07:00
 tags: robot-learning continual-learning fine-tuning
