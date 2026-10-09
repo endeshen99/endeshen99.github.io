@@ -9,7 +9,7 @@ giscus_comments: false
 related_posts: false
 ---
 
-<p class="post-tldr"><strong>TL;DR</strong> I fine-tuned a robot policy that had been trained to avoid obstacles on ordinary task demonstrations, none of which contained an obstacle. Its collision rate rose from 2.5% to 30.8% while task success barely moved, and the avoidance behavior was already gone within 200 training steps, long before any skill dropped. Asking the robot to avoid obstacles did nothing; mixing in the safe policy's own rollouts limited the damage, and 200 steps on them restored it. Learned safety behaves like a motion habit, so re-test it after every update.</p>
+<p class="post-tldr"><strong>TL;DR</strong> I took a robot policy trained to avoid obstacles and fine-tuned it on ordinary task demonstrations that contained no obstacles. Its collision rate rose from 2.5% to 30.8%, while its skill on the original tasks largely held. The avoidance started eroding within the first 200 training steps, before task success dropped. Telling the robot to avoid obstacles did nothing; mixing the safe policy’s own rollouts into training limited the damage, and 200 further steps on them restored it. Learned safety here behaves like a motion habit, so it needs re-testing after every update.</p>
 
 <hr class="post-rule">
 

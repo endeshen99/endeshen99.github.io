@@ -9,7 +9,7 @@ giscus_comments: false
 related_posts: false
 ---
 
-<p class="post-tldr"><strong>TL;DR</strong> I fine-tuned a robot policy on a new task with 50 human demonstrations and watched what happened to a skill it already had. The old skill was gone before the new one arrived: its success fell from 0.70 to 0.14 after 100 training steps and to 0.00 after 200, while the new task didn't start improving until around step 1,060. That ordering means early stopping couldn't have saved it, and a lower learning rate didn't either. How far the policy had drifted from its starting point didn't predict the loss: at 100 steps it was about as close to the start as policies that kept the skill in full. As a control, the same objective and budget on the policy's own rollouts did not forget, so the loss comes from the data, not the training loss.</p>
+<p class="post-tldr"><strong>TL;DR</strong> I fine-tuned a robot policy on a new task with 50 human demonstrations and tracked a skill it already had. The old skill was gone before the new one arrived: its success fell from 0.70 to 0.14 after 100 steps and to 0.00 after 200, while the new task only began improving around step 1,060. Neither early stopping nor a lower learning rate could save it. Drift from the starting policy didn’t predict the loss either: at step 100, the policy was about as close to the start as runs that kept the skill. Training on the policy’s own rollouts, with the same objective and budget, did not forget, so the forgetting comes from the data, not the training objective.</p>
 
 <hr class="post-rule">
 
