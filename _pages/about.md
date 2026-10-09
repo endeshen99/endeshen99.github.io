@@ -11,7 +11,7 @@ profile:
   image_circular: false # crops the image to make it circular
 
 selected_papers: true # includes a list of papers marked as "selected={true}"
-social: true # includes social icons at the bottom of the page
+social: false # social links are the text line under the subtitle instead
 
 announcements:
   enabled: false # includes a list of news items
@@ -23,6 +23,12 @@ latest_posts:
   scrollable: true # adds a vertical scroll bar if there are more than 3 new posts items
   limit: 3 # leave blank to include all the blog posts
 ---
+
+<p class="contact-links">
+  <a href="mailto:endeshen99@gmail.com">Email</a> &middot;
+  <a href="https://github.com/endeshen99">GitHub</a> &middot;
+  <a href="https://scholar.google.com/citations?user=5Hi8OdsAAAAJ">Google Scholar</a>
+</p>
 
 I'm an independent researcher in San Francisco studying what happens to robot foundation models when they keep learning after deployment: **which behaviors survive fine-tuning, which are lost, and what that means for safety.**
 
