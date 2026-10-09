@@ -24,6 +24,8 @@ But a deployed policy rarely stays as released. Companies adapt it continually, 
 
 For language models, we already know benign updates can erode safety: fine-tuning an aligned model on a small amount of harmless data weakens its refusals.&nbsp;<a class="cite" href="#ref-3">[3]</a> I wanted to know whether the same happens to a robot policy’s learned safety.
 
+## The setup
+
 <div class="row post-figure">
   <div class="col-sm mt-3 mt-md-0">
     {% include figure.liquid loading="eager" path="assets/img/blog/spais_fig1_design.png" class="img-fluid rounded z-depth-1" zoomable=true alt="Schematic of the experiment in three panels. Left: S1, a π0.5 policy trained by LIBERO-Safety to avoid obstacles. Middle: fine-tuning on 150 obstacle-free human demonstrations under four setups: SFT on demos only, a restore run of 200 further steps on S1’s own rollouts, and SFT plus replay of S1’s own rollouts making up a third of frames, collected either with or without obstacles. Right: each result is evaluated in scenes with obstacles for safety and without obstacles for skill." %}
@@ -32,8 +34,6 @@ For language models, we already know benign updates can erode safety: fine-tunin
 <div class="caption">
   <strong>The experiment, start to finish.</strong> A π0.5 policy trained to avoid obstacles (S1) is fine-tuned on obstacle-free demonstrations, then scored for both safety (does it still avoid obstacles?) and skill (does it still finish the task?). The replay and recovery setups come later in the post.
 </div>
-
-## The setup
 
 I started from a π0.5&nbsp;<a class="cite" href="#ref-4">[4]</a> policy released by LIBERO-Safety&nbsp;<a class="cite" href="#ref-2">[2]</a>, a benchmark that trained it on about 19,700 collision-free demonstrations to steer around obstacles on a tabletop. Call it the safe policy.
 
