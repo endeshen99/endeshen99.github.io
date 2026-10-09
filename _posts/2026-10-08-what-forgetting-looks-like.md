@@ -15,11 +15,11 @@ related_posts: false
 
 A robotics founder once told me about a customer whose towel-folding robots were working well, and who then asked them to also set aside towels that were slightly dirty. Requests like that are the norm once robots leave the lab: a model that went through extensive pretraining has to pick up small new skills quickly, without losing the ones it already has.
 
-Recent work found that on-policy reinforcement learning (RL) forgets far less than supervised fine-tuning on vision-language-action (VLA) models. In language models, that difference has been traced to the data RL trains on, sampled from the model itself, rather than to the RL objective. I wanted to see what that forgetting actually looks like on a robot policy.
+Recent work found that on-policy reinforcement learning (RL) forgets far less than supervised fine-tuning on vision-language-action (VLA) models.&nbsp;<a class="cite" href="#ref-1">[1]</a> In language models, that difference has been traced to the data RL trains on, sampled from the model itself, rather than to the RL objective.&nbsp;<a class="cite" href="#ref-2">[2]</a> I wanted to see what that forgetting actually looks like on a robot policy.
 
 ## The setup
 
-The starting point is a π0.5 policy in the LIBERO simulator that I had already improved with on-policy RL on one task: putting both moka pots on the stove. RL raised its success there from 0.55 to 0.70. That improved skill is what I wanted to protect.
+The starting point is a π0.5&nbsp;<a class="cite" href="#ref-3">[3]</a> policy in the LIBERO&nbsp;<a class="cite" href="#ref-4">[4]</a> simulator that I had already improved with on-policy RL on one task: putting both moka pots on the stove. RL raised its success there from 0.55 to 0.70. That improved skill is what I wanted to protect.
 
 Next, I fine-tuned it on a new task, stacking one bowl on another and placing them in a tray, from a different scene. Every version used the same training loss, optimizer, step budget, and starting point. Only the training data changed:
 
@@ -91,6 +91,16 @@ Replay works, and whose data you replay matters. Mixing the policy's own old-tas
 
 Next, I want to test the data that sits in between: mostly the robot’s own behavior, with simulated human corrections only where it fails. Comparing those trajectories with pure human demonstrations would show whether data that stays close to what the policy already does can teach new tasks without erasing old ones. If the pattern above holds, corrections should learn faster than the policy’s own data while forgetting less than demonstrations.
 
-I’m also curious about scale. Recent work found that pretrained VLAs are [surprisingly resistant to forgetting](https://arxiv.org/abs/2603.03818) in continual learning, yet here 50 demonstrations erased a skill within 200 steps. I’d like to measure directly how resistance to forgetting changes with the size of the pretrained model and the amount of pretraining.
+I’m also curious about scale. Recent work found that pretrained VLAs are surprisingly resistant to forgetting in continual learning,&nbsp;<a class="cite" href="#ref-5">[5]</a> yet here 50 demonstrations erased a skill within 200 steps. I’d like to measure directly how resistance to forgetting changes with the size of the pretrained model and the amount of pretraining.
 
 Limits: simulation only, one model family, one old skill tested against three new tasks, and single runs on two of those pairs. The old task also appears in the base model's training data, which may make it easier to retain than a skill the model never saw.
+
+## References
+
+<ol class="references">
+  <li id="ref-1">Hu et al., “Simple Recipe Works: Vision-Language-Action Models are Natural Continual Learners with Reinforcement Learning”, RLC 2026. <a href="https://arxiv.org/abs/2603.11653">arXiv:2603.11653</a></li>
+  <li id="ref-2">Shenfeld et al., “RL’s Razor: Why Online Reinforcement Learning Forgets Less”, arXiv 2025. <a href="https://arxiv.org/abs/2509.04259">arXiv:2509.04259</a></li>
+  <li id="ref-3">Physical Intelligence, “π0.5: a Vision-Language-Action Model with Open-World Generalization”, arXiv 2025. <a href="https://arxiv.org/abs/2504.16054">arXiv:2504.16054</a></li>
+  <li id="ref-4">Liu et al., “LIBERO: Benchmarking Knowledge Transfer for Lifelong Robot Learning”, NeurIPS 2023. <a href="https://arxiv.org/abs/2306.03310">arXiv:2306.03310</a></li>
+  <li id="ref-5">Liu et al., “Pretrained Vision-Language-Action Models are Surprisingly Resistant to Forgetting in Continual Learning”, arXiv 2026. <a href="https://arxiv.org/abs/2603.03818">arXiv:2603.03818</a></li>
+</ol>

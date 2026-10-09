@@ -15,11 +15,11 @@ related_posts: false
 
 Robot policies are increasingly trained to behave safely: avoid obstacles, keep clear of people. That behavior is usually measured once, on the model as released. But a deployed policy rarely stays as released. Teams fine-tune it on demonstrations of their own tasks, and the safety behavior is assumed to come along.
 
-For language models, we already know it often doesn't: fine-tuning an aligned model on a small amount of harmless data can erode its refusals. I wanted to know whether the same thing happens to a robot policy.
+For language models, we already know it often doesn't: fine-tuning an aligned model on a small amount of harmless data can erode its refusals.&nbsp;<a class="cite" href="#ref-1">[1]</a> I wanted to know whether the same thing happens to a robot policy.
 
 ## The setup
 
-I started from a π0.5 policy released by LIBERO-Safety, a benchmark that trained it on about 19,700 collision-free demonstrations to steer around obstacles on a tabletop. Call it the safe policy.
+I started from a π0.5&nbsp;<a class="cite" href="#ref-2">[2]</a> policy released by LIBERO-Safety&nbsp;<a class="cite" href="#ref-3">[3]</a>, a benchmark that trained it on about 19,700 collision-free demonstrations to steer around obstacles on a tabletop. Call it the safe policy.
 
 Then I did what a downstream user would do: fine-tuned it on 150 human demonstrations of three of the same tasks (a bowl, a book, and a moka-pot task), in their original scenes, which have no obstacles. Nothing in this data teaches the robot to collide. It just never shows an obstacle.
 
@@ -82,6 +82,15 @@ In this setup, learned safety behaves less like an understanding of obstacles an
 
 This is one base model, one benchmark, three fine-tuning tasks, and simulation only, with one or two training seeds per setup. The skill results rest mainly on two tasks, since moka's skill collapsed under every version.
 
-The question I'd most like to answer next is what would make safety behaviors durable under routine fine-tuning, and how we would check that they were. One candidate is safety learned as a concept rather than a habit. [Probing work](https://arxiv.org/abs/2506.09937) suggests robot policies already carry internal signals for ideas like an upcoming task failure. If a similar representation of “unsafe” exists, or can be installed, I could check whether it survives fine-tuning, and test whether safety anchored to it lasts longer than safety anchored to motion.
+The question I'd most like to answer next is what would make safety behaviors durable under routine fine-tuning, and how we would check that they were. One candidate is safety learned as a concept rather than a habit. Probing work&nbsp;<a class="cite" href="#ref-4">[4]</a> suggests robot policies already carry internal signals for ideas like an upcoming task failure. If a similar representation of “unsafe” exists, or can be installed, I could check whether it survives fine-tuning, and test whether safety anchored to it lasts longer than safety anchored to motion.
 
 That representation need not come from language. It could be conditioned on what the robot sees, so that the policy first registers an obstacle in the image and then plans around it, rather than reproducing a swerve it learned from one set of trajectories. It would also give a cleaner diagnostic than collision counts: if the “unsafe” signal still fires after fine-tuning but the robot collides anyway, the concept survived and only the motion was lost.
+
+## References
+
+<ol class="references">
+  <li id="ref-1">Qi et al., “Fine-tuning Aligned Language Models Compromises Safety, Even When Users Do Not Intend To!”, ICLR 2024. <a href="https://arxiv.org/abs/2310.03693">arXiv:2310.03693</a></li>
+  <li id="ref-2">Physical Intelligence, “π0.5: a Vision-Language-Action Model with Open-World Generalization”, arXiv 2025. <a href="https://arxiv.org/abs/2504.16054">arXiv:2504.16054</a></li>
+  <li id="ref-3">Cui et al., “LIBERO-Safety: A Comprehensive Benchmark for Physical and Semantic Safety in Vision-Language-Action Models”, ECCV 2026. <a href="https://arxiv.org/abs/2606.23686">arXiv:2606.23686</a></li>
+  <li id="ref-4">Gu et al., “SAFE: Multitask Failure Detection for Vision-Language-Action Models”, NeurIPS 2025. <a href="https://arxiv.org/abs/2506.09937">arXiv:2506.09937</a></li>
+</ol>
