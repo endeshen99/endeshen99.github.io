@@ -16,7 +16,7 @@ related_posts: false
 
 <hr class="post-rule">
 
-A robotics founder once told me about a customer whose towel-folding robots were working well, and who then asked them to also set aside towels that were slightly dirty. Requests like that are the norm once robots leave the lab: a model that went through extensive pretraining has to pick up small new skills quickly, without losing the ones it already has.
+A robotics founder once told me about a customer whose towel-folding robots were working well. The customer’s most urgent request was something the robots were never trained to do: spotting and setting aside towels that were slightly dirty. Requests like that are the norm once robots leave the lab: a model that went through extensive pretraining has to pick up small new skills quickly, without losing the ones it already has.
 
 Recent work found that on-policy reinforcement learning (RL) forgets far less than supervised fine-tuning on vision-language-action (VLA) models.&nbsp;<a class="cite" href="#ref-1">[1]</a> In language models, that difference has been traced to the data RL trains on, sampled from the model itself, rather than to the RL objective.&nbsp;<a class="cite" href="#ref-2">[2]</a> I wanted to look at this on a robot policy: I held the training objective fixed, changed only the data, and looked closely at how the forgetting unfolds.
 
