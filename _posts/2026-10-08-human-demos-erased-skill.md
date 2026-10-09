@@ -15,7 +15,7 @@ related_posts: false
   </div>
 </div>
 <div class="caption">
-  Success on the old task (moka pots) and the new task (bowl stacking) across fine-tuning steps. Left: trained on 50 human demonstrations. Right: trained on the policy's own successful rollouts. Figure 1 in the paper.
+  Task success during supervised fine-tuning (SFT), measured at each training step. Orange is the old task, putting the moka pots on the stove; blue is the new task, stacking bowls. Left: trained on 50 human demonstrations. Right: trained on 143 of the policy's own successful rollouts. Bars are 95% confidence intervals.
 </div>
 
 I fine-tuned a robot policy on a new task two ways, changing only where the training data came from. With 50 human demonstrations, it learned the new task and lost a skill it already had: success on the old task fell from 0.70 to 0.00. With its own successful attempts at the new task, it kept the old skill in every run.

@@ -15,7 +15,7 @@ related_posts: false
   </div>
 </div>
 <div class="caption">
-  The same bowl episode under the safe policy (top) and after fine-tuning (bottom). Both finish the task; only the fine-tuned policy clips the obstacle on the way down. Figure 5 in the paper.
+  The same bowl episode under the safe policy (top, labeled S1) and after fine-tuning (bottom, labeled Demo). Both finish the task; only the fine-tuned policy clips the obstacle, at step 97.
 </div>
 
 Ordinary fine-tuning raised my robot policy's collision rate from 2.5% to 30.8%, while it kept doing its tasks.

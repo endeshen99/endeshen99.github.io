@@ -296,6 +296,16 @@ body.sticky-bottom-footer {
     margin-bottom: 2.5rem;
   }
 
+  // Optical alignment: the title's large glyphs carry side bearing, so pull it
+  // left a touch to line up with the date; then set the date slightly apart.
+  .post-title {
+    margin-left: -0.04em;
+  }
+
+  .post-meta {
+    margin-top: 0.75rem;
+  }
+
   .post-content {
     h2 {
       font-size: 1.5rem;
