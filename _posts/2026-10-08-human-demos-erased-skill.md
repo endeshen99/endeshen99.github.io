@@ -9,6 +9,8 @@ giscus_comments: false
 related_posts: false
 ---
 
+<p class="post-tldr"><strong>TL;DR</strong> I fine-tuned a robot policy on a new task two ways, same objective and budget, changing only the data. Fifty human demonstrations taught the new task but erased a skill the policy already had, from 0.70 success to 0.00, within 200 steps and before the new task started improving. The policy's own successful rollouts kept the old skill in every run, and mixing a third of them into the demonstrations kept it at 0.70 while learning the new task just as well. Whose data you train on decides what the robot forgets.</p>
+
 <div class="row post-figure">
   <div class="col-sm mt-3 mt-md-0">
     {% include figure.liquid loading="eager" path="assets/img/blog/csir_fig1_learning_curves.png" class="img-fluid rounded z-depth-1" zoomable=true %}
@@ -17,9 +19,6 @@ related_posts: false
 <div class="caption">
   Task success during supervised fine-tuning (SFT), measured at each training step. Orange is the old task, putting the moka pots on the stove; blue is the new task, stacking bowls. Left: trained on 50 human demonstrations. Right: trained on 143 of the policy's own successful rollouts. Bars are 95% confidence intervals.
 </div>
-
-I fine-tuned a robot policy on a new task two ways, changing only where the training data came from. With 50 human demonstrations, it learned the new task and lost a skill it already had: success on the old task fell from 0.70 to 0.00. With its own successful attempts at the new task, it kept the old skill in every run.
-{: .post-lead}
 
 A robot that keeps improving after deployment has to learn new things without losing old ones. Recent work found that on-policy reinforcement learning (RL) forgets far less than supervised fine-tuning on vision-language-action (VLA) models. In language models, that difference has been traced to the data RL trains on, sampled from the model itself, rather than to the RL objective. I wanted to test that explanation on a robot policy.
 

@@ -9,6 +9,8 @@ giscus_comments: false
 related_posts: false
 ---
 
+<p class="post-tldr"><strong>TL;DR</strong> I fine-tuned a robot policy that had been trained to avoid obstacles on ordinary task demonstrations, none of which contained an obstacle. Its collision rate rose from 2.5% to 30.8% while task success barely moved, and the avoidance behavior was already gone within 200 training steps, long before any skill dropped. Asking the robot to avoid obstacles did nothing; mixing in the safe policy's own rollouts limited the damage, and 200 steps on them restored it. Learned safety behaves like a motion habit, so re-test it after every update.</p>
+
 <div class="row post-figure">
   <div class="col-sm mt-3 mt-md-0">
     {% include figure.liquid loading="eager" path="assets/img/blog/spais_fig5_filmstrips.png" class="img-fluid rounded z-depth-1" zoomable=true %}
@@ -17,9 +19,6 @@ related_posts: false
 <div class="caption">
   The same bowl episode under the safe policy (top, labeled S1) and after fine-tuning (bottom, labeled Demo). Both finish the task; only the fine-tuned policy clips the obstacle, at step 97.
 </div>
-
-Ordinary fine-tuning raised my robot policy's collision rate from 2.5% to 30.8%, while it kept doing its tasks.
-{: .post-lead}
 
 Robot policies are increasingly trained to behave safely: avoid obstacles, keep clear of people. That behavior is usually measured once, on the model as released. But a deployed policy rarely stays as released. Teams fine-tune it on demonstrations of their own tasks, and the safety behavior is assumed to come along.
 
