@@ -17,8 +17,6 @@ Robot policies are increasingly trained to behave safely: avoid obstacles, keep 
 
 For language models, we already know it often doesn't: fine-tuning an aligned model on a small amount of harmless data can erode its refusals. I wanted to know whether the same thing happens to a robot policy.
 
-*\[Your note: a sentence or two on why this question caught your attention.\]*
-
 ## The setup
 
 I started from a π0.5 policy released by LIBERO-Safety, a benchmark that trained it on about 19,700 collision-free demonstrations to steer around obstacles on a tabletop. Call it the safe policy.
@@ -30,7 +28,7 @@ I scored every checkpoint two ways on the same seeded episodes, so each comparis
 - **Safety:** the obstacle scenes. Did the robot or the object it carries touch an obstacle?
 - **Skill:** the original scenes. Did it finish the task?
 
-One practical lesson came before any results. The benchmark's built-in collision flag never fired, even when I scripted the gripper straight into an obstacle. I computed collisions from the simulator's contact list instead, which reported 14.2% where the flag reported 3.0% on the same episodes. If you evaluate safety, check that your collision metric can actually see a collision.
+One practical lesson came before any results. The benchmark's built-in collision flag never fired, even when I scripted the gripper straight into an obstacle. I computed collisions from the simulator's contact list instead, which reported 14.2% where the flag reported 3.0% on the same episodes. Anyone evaluating safety should check that the collision metric can actually detect a collision.
 
 ## What happened
 
@@ -76,18 +74,14 @@ The loss also turned out to be shallow. Starting from the degraded policy, 200 m
 
 The damage is also local. Near obstacles, the fine-tuned policy's actions drifted from the safe policy's about 1.6 times more than elsewhere. The forgetting isn't uniform drift that happens to break avoidance; it sits right where avoidance lives.
 
-## What this means if you deploy these models
+## What this suggests
 
-In this setup, learned safety behaves less like an understanding of obstacles and more like a motion habit, tied to the data that installed it. Three practical takeaways:
-
-- **Re-check safety after every update.** A safety evaluation of the released model says little about the fine-tuned one, and task success won't warn you.
-- **Ship the safety data with the model.** The base policy's own hazard rollouts are what protected and restored the behavior here. If they come with the model, a downstream user can mix them in.
-- **Know where your safety lives.** A safety filter outside the policy can't be fine-tuned away. Safety learned in the weights can be, quietly, by someone with no intention of removing it.
+In this setup, learned safety behaves less like an understanding of obstacles and more like a motion habit, tied to the data that installed it. A safety evaluation of the released model says little about a fine-tuned one, and task success gives no warning, so safety has to be re-checked after every update. As more safety behavior is trained directly into robot foundation models, that check will matter more.
 
 ## Limits and what's next
 
-This is one base model, one benchmark, three fine-tuning tasks, and simulation only, with one or two training seeds per setup. The skill results rest mainly on two tasks, since moka's skill collapsed under every version. Treat it as a clear warning sign, not a general law.
+This is one base model, one benchmark, three fine-tuning tasks, and simulation only, with one or two training seeds per setup. The skill results rest mainly on two tasks, since moka's skill collapsed under every version.
 
 The question I'd most like to answer next: if safety behaviors don't survive routine fine-tuning, what would make them durable, and how would we check that they did?
 
-*\[Your note: the next experiment you'd run, and anything that surprised you along the way.\]*
+Next, I want to see whether safety can be learned as a concept rather than a habit. [Probing work](https://arxiv.org/abs/2506.09937) suggests robot policies already carry internal signals for ideas like an upcoming task failure. If a similar representation of “unsafe” exists, or can be installed, I could check whether it survives fine-tuning, and test whether safety anchored to it lasts longer than safety anchored to motion. That representation need not come from language. It could be conditioned on what the robot sees, so that the policy first registers an obstacle in the image and then plans around it, rather than reproducing a swerve it learned from one set of trajectories. It would also give a cleaner diagnostic than collision counts: if the “unsafe” signal still fires after fine-tuning but the robot collides anyway, the concept survived and only the motion was lost.
