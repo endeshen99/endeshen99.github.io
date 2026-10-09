@@ -24,7 +24,7 @@ latest_posts:
   limit: 3 # leave blank to include all the blog posts
 ---
 
-I'm an independent researcher in San Francisco studying what happens to robot foundation models when they keep learning after deployment: **which behaviors survive fine-tuning, which are lost, and what that means for safety.** My current work focuses on vision-language-action (VLA) models; world models are next.
+I'm an independent researcher in San Francisco studying what happens to robot foundation models when they keep learning after deployment: **which behaviors survive fine-tuning, which are lost, and what that means for safety.**
 
 Before robotics, I worked on zero-knowledge proofs for machine learning, as a cryptographer at Modulus Labs on the Remainder proving system and then at Tools for Humanity. I also founded Tegore (YC X25), a voice-based math tutor for K-12 students.
 
