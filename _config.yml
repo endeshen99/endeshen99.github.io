@@ -353,6 +353,8 @@ scholar:
   details_link: Details
 
   query: "@*"
+  sort_by: year # newest first everywhere, including ungrouped lists like selected papers
+  order: descending
   group_by: year
   group_order: descending
 
