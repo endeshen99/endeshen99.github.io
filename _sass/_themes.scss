@@ -256,3 +256,11 @@ body footer.sticky-bottom {
     text-align: right;
   }
 }
+
+// About page: more air above each section heading so "on my mind", "latest
+// posts" and "selected publications" read as separate blocks. The `.about`
+// class comes from the local _layouts/about.liquid override.
+.post.about article > h2,
+.post.about article .clearfix > h4 {
+  margin-top: 2.5rem;
+}
