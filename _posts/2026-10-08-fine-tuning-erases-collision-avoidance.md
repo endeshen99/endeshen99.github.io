@@ -18,15 +18,15 @@ related_posts: false
 
 <hr class="post-rule">
 
-Robot foundation models are increasingly deployed in realistic settings, folding laundry in commercial facilities, working in warehouses, and operating around people. In these settings a policy has to behave safely: avoid obstacles, keep clear of people, handle sharp objects with care. Safety behaviors like these are increasingly trained directly into the policy.&nbsp;<a class="cite" href="#ref-1">[1]</a>
+Robot foundation models are increasingly deployed in realistic settings, folding laundry in commercial facilities, working in warehouses, and operating around people.&nbsp;<a class="cite" href="#ref-1">[1]</a> In these settings a policy has to behave safely: avoid obstacles, keep clear of people, handle sharp objects with care. Safety behaviors like these are increasingly trained directly into the policy.&nbsp;<a class="cite" href="#ref-2">[2]</a>
 
 But a deployed policy rarely stays as released. Companies adapt it continually, tuning it to each new customer, task, and environment. This matters more for robots than for language models: physical data is far harder to collect than text, so adaptation is constant once a robot is in the field, each update another chance for installed behavior to drift.
 
-For language models, we already know benign updates can erode safety: fine-tuning an aligned model on a small amount of harmless data weakens its refusals.&nbsp;<a class="cite" href="#ref-2">[2]</a> I wanted to know whether the same happens to a robot policy’s learned safety.
+For language models, we already know benign updates can erode safety: fine-tuning an aligned model on a small amount of harmless data weakens its refusals.&nbsp;<a class="cite" href="#ref-3">[3]</a> I wanted to know whether the same happens to a robot policy’s learned safety.
 
 ## The setup
 
-I started from a π0.5&nbsp;<a class="cite" href="#ref-3">[3]</a> policy released by LIBERO-Safety&nbsp;<a class="cite" href="#ref-1">[1]</a>, a benchmark that trained it on about 19,700 collision-free demonstrations to steer around obstacles on a tabletop. Call it the safe policy.
+I started from a π0.5&nbsp;<a class="cite" href="#ref-4">[4]</a> policy released by LIBERO-Safety&nbsp;<a class="cite" href="#ref-2">[2]</a>, a benchmark that trained it on about 19,700 collision-free demonstrations to steer around obstacles on a tabletop. Call it the safe policy.
 
 Then I did what a downstream user would do: fine-tuned it on 150 human demonstrations of three of the same tasks (a bowl, a book, and a moka-pot task), in their original scenes, which have no obstacles. Nothing in this data teaches the robot to collide. It just never shows an obstacle.
 
@@ -34,8 +34,6 @@ I scored every checkpoint two ways on the same seeded episodes, so each comparis
 
 - **Safety:** the obstacle scenes. Did the robot or the object it carries touch an obstacle?
 - **Skill:** the original scenes. Did it finish the task?
-
-One practical lesson came before any results. The benchmark's built-in collision flag never fired, even when I scripted the gripper straight into an obstacle. I computed collisions from the simulator's contact list instead, which reported 14.2% where the flag reported 3.0% on the same episodes. Anyone evaluating safety should check that the collision metric can actually detect a collision.
 
 ## What happened
 
@@ -85,19 +83,22 @@ The damage is also local. Near obstacles, the fine-tuned policy's actions drifte
 
 In this setup, learned safety behaves less like an understanding of obstacles and more like a motion habit, tied to the data that installed it. A safety evaluation of the released model says little about a fine-tuned one, and task success gives no warning, so safety has to be re-checked after every update. As more safety behavior is trained directly into robot foundation models, that check will matter more.
 
+**A note on measurement.** The benchmark's built-in collision flag never fired, even when I drove the gripper straight into an obstacle, so I computed collisions from the simulator's contact list instead (14.2% versus the flag's 3.0% on the same episodes). Anyone evaluating safety should check that the metric can actually detect the failure.
+
 ## Limits and what's next
 
 This is one base model, one benchmark, three fine-tuning tasks, and simulation only, with one or two training seeds per setup. The skill results rest mainly on two tasks, since moka's skill collapsed under every version.
 
-The question I'd most like to answer next is what would make safety behaviors durable under routine fine-tuning, and how we would check that they were. One candidate is safety learned as a concept rather than a habit. Probing work&nbsp;<a class="cite" href="#ref-4">[4]</a> suggests robot policies already carry internal signals for ideas like an upcoming task failure. If a similar representation of “unsafe” exists, or can be installed, I could check whether it survives fine-tuning, and test whether safety anchored to it lasts longer than safety anchored to motion.
+The question I'd most like to answer next is what would make safety behaviors durable under routine fine-tuning, and how we would check that they were. One candidate is safety learned as a concept rather than a habit. Probing work&nbsp;<a class="cite" href="#ref-5">[5]</a> suggests robot policies already carry internal signals for ideas like an upcoming task failure. If a similar representation of “unsafe” exists, or can be installed, I could check whether it survives fine-tuning, and test whether safety anchored to it lasts longer than safety anchored to motion.
 
 That representation need not come from language. It could be conditioned on what the robot sees, so that the policy first registers an obstacle in the image and then plans around it, rather than reproducing a swerve it learned from one set of trajectories. It would also give a cleaner diagnostic than collision counts: if the “unsafe” signal still fires after fine-tuning but the robot collides anyway, the concept survived and only the motion was lost.
 
 ## References
 
 <ol class="references">
-  <li id="ref-1">Cui et al., “LIBERO-Safety: A Comprehensive Benchmark for Physical and Semantic Safety in Vision-Language-Action Models”, ECCV 2026. <a href="https://arxiv.org/abs/2606.23686">arXiv:2606.23686</a></li>
-  <li id="ref-2">Qi et al., “Fine-tuning Aligned Language Models Compromises Safety, Even When Users Do Not Intend To!”, ICLR 2024. <a href="https://arxiv.org/abs/2310.03693">arXiv:2310.03693</a></li>
-  <li id="ref-3">Physical Intelligence, “π0.5: a Vision-Language-Action Model with Open-World Generalization”, arXiv 2025. <a href="https://arxiv.org/abs/2504.16054">arXiv:2504.16054</a></li>
-  <li id="ref-4">Gu et al., “SAFE: Multitask Failure Detection for Vision-Language-Action Models”, NeurIPS 2025. <a href="https://arxiv.org/abs/2506.09937">arXiv:2506.09937</a></li>
+  <li id="ref-1">DYNA Robotics, “DYNA Robotics Launches DYNA 2.1 Physical Agent, a Semi-humanoid Robot that Completes Full Workflows such as a Commercial Laundry Shift”, PR Newswire 2026. <a href="https://www.prnewswire.com/news-releases/dyna-robotics-launches-dyna-2-1-physical-agent-a-semi-humanoid-robot-that-completes-full-workflows-such-as-a-commercial-laundry-shift-302892411.html">Press release</a></li>
+  <li id="ref-2">Cui et al., “LIBERO-Safety: A Comprehensive Benchmark for Physical and Semantic Safety in Vision-Language-Action Models”, ECCV 2026. <a href="https://arxiv.org/abs/2606.23686">arXiv:2606.23686</a></li>
+  <li id="ref-3">Qi et al., “Fine-tuning Aligned Language Models Compromises Safety, Even When Users Do Not Intend To!”, ICLR 2024. <a href="https://arxiv.org/abs/2310.03693">arXiv:2310.03693</a></li>
+  <li id="ref-4">Physical Intelligence, “π0.5: a Vision-Language-Action Model with Open-World Generalization”, arXiv 2025. <a href="https://arxiv.org/abs/2504.16054">arXiv:2504.16054</a></li>
+  <li id="ref-5">Gu et al., “SAFE: Multitask Failure Detection for Vision-Language-Action Models”, NeurIPS 2025. <a href="https://arxiv.org/abs/2506.09937">arXiv:2506.09937</a></li>
 </ol>
