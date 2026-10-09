@@ -1,7 +1,7 @@
 ---
 layout: post
-title: Safety you train into a robot policy can quietly disappear
-description: Ordinary fine-tuning raised a robot policy's collision rate from 2.5% to 30.8% while it kept doing its tasks.
+title: Fine-tuning on obstacle-free demos erases a VLA's learned collision avoidance
+description: A safe π0.5 policy fine-tuned on 150 obstacle-free demonstrations went from a 2.5% to a 30.8% collision rate while still doing its tasks.
 date: 2026-10-08 10:00:00-07:00
 tags: robot-learning safety fine-tuning
 categories: research

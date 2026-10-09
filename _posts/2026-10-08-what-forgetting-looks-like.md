@@ -1,7 +1,7 @@
 ---
 layout: post
-title: Human demonstrations erased my robot's other skill. Its own data didn't.
-description: Fine-tuning a robot policy on a new task two ways, changing only where the training data came from.
+title: What forgetting looks like when a robot policy is fine-tuned on human demonstrations
+description: A robot policy lost an existing skill within 200 steps of fine-tuning on human demonstrations, before it learned the new task.
 date: 2026-10-08 09:00:00-07:00
 tags: robot-learning continual-learning fine-tuning
 categories: research
@@ -9,11 +9,11 @@ giscus_comments: false
 related_posts: false
 ---
 
-<p class="post-tldr"><strong>TL;DR</strong> I fine-tuned a robot policy on a new task two ways, same objective and budget, changing only the data. Fifty human demonstrations taught the new task but erased a skill the policy already had, from 0.70 success to 0.00, within 200 steps and before the new task started improving. The policy's own successful rollouts kept the old skill in every run, and mixing a third of them into the demonstrations kept it at 0.70 while learning the new task just as well. Whose data you train on decides what the robot forgets.</p>
+<p class="post-tldr"><strong>TL;DR</strong> I fine-tuned a robot policy on a new task with 50 human demonstrations and watched what happened to a skill it already had. The old skill was gone before the new one arrived: its success fell from 0.70 to 0.14 after 100 training steps and to 0.00 after 200, while the new task didn't start improving until around step 1,060. That ordering means early stopping couldn't have saved it, and a lower learning rate didn't either. How far the policy had drifted from its starting point didn't predict the loss: at 100 steps it was about as close to the start as policies that kept the skill in full. As a control, the same objective and budget on the policy's own rollouts did not forget, so the loss comes from the data, not the training loss.</p>
 
 <hr class="post-rule">
 
-A robot that keeps improving after deployment has to learn new things without losing old ones. Recent work found that on-policy reinforcement learning (RL) forgets far less than supervised fine-tuning on vision-language-action (VLA) models. In language models, that difference has been traced to the data RL trains on, sampled from the model itself, rather than to the RL objective. I wanted to test that explanation on a robot policy.
+A robot that keeps improving after deployment has to learn new things without losing old ones. Recent work found that on-policy reinforcement learning (RL) forgets far less than supervised fine-tuning on vision-language-action (VLA) models. In language models, that difference has been traced to the data RL trains on, sampled from the model itself, rather than to the RL objective. I wanted to see what that forgetting actually looks like on a robot policy.
 
 *\[Your note: a sentence on why this question mattered to you.\]*
 
@@ -32,7 +32,7 @@ Each checkpoint was scored on both tasks over the same seeded episodes, so every
 
 ## What happened
 
-Human demonstrations taught the new task and erased the old one. The policy's own data kept the old skill and learned the new task only modestly.
+Fifty human demonstrations taught the new task and erased the old one. Across runs, success on the new task rose from 0.35 to 0.71 while success on the old task fell from 0.70 to 0.00, and it hit zero in every demonstration run. The same objective on the policy's own successful rollouts kept the old skill in all six runs, which points to the data rather than the training loss. The rest of this post is about what the loss looked like.
 
 | Training data | New task (bowls) | Old task (moka pots) |
 | --- | --- | --- |
@@ -44,7 +44,7 @@ Human demonstrations taught the new task and erased the old one. The policy's ow
 
 The old skill went to zero in every Demo run. It held or improved in all six Own runs. The same split held on two more new tasks, one closely related to the old task and one unrelated: demonstrations nearly erased the old skill (0.05 and 0.00), while the policy's own data kept it (0.69 and 0.71) but learned neither new task.
 
-The failures look like a lost motor skill rather than a forgotten task. The policy still reaches for the right moka pot, then closes the gripper late and lifts it in only 40% of attempts.
+In one run I looked at closely, the failures looked less like a forgotten task than a lost motor skill: the policy still reached for the right moka pot, then closed the gripper late and rarely lifted it.
 
 <div class="row post-figure">
   <div class="col-sm mt-3 mt-md-0">
