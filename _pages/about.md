@@ -30,7 +30,7 @@ latest_posts:
   <a href="https://scholar.google.com/citations?user=5Hi8OdsAAAAJ">Google Scholar</a>
 </p>
 
-I'm an independent researcher in San Francisco studying what happens to robot foundation models when they keep learning after deployment: **which behaviors survive fine-tuning, which are lost, and what that means for safety.**
+I'm an independent researcher in San Francisco studying what happens to robot foundation models when they learn after deployment: **which behaviors survive further training, which are lost, and what that means for safety.**
 
 Before robotics, I worked on zero-knowledge proofs for machine learning, as a cryptographer at Modulus Labs on the Remainder proving system and then at Tools for Humanity. I also founded Tegore (YC X25), a voice-based math tutor for K-12 students.
 
