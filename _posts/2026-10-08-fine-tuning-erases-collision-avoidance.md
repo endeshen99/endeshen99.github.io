@@ -1,7 +1,7 @@
 ---
 layout: post
-title: Fine-tuning on obstacle-free demos erases a VLA's learned collision avoidance
-description: Fine-tuning a collision-avoiding π0.5 policy on 150 obstacle-free demonstrations raised its collision rate from 2.5% to 30.8%.
+title: Fine-tuning on obstacle-free demos degrades a VLA's learned collision avoidance
+description: The results suggest this policy learned avoidance as a fragile motion habit and lacks a robust semantic concept of obstacles as hazards.
 og_image: /assets/img/blog/spais_fig5_filmstrips.png
 date: 2026-10-08 10:00:00-07:00
 tags: robot-learning safety fine-tuning
