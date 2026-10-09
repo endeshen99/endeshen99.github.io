@@ -40,3 +40,4 @@ I did my B.S. and M.S. in Computer Science at Stanford, where I worked on text g
 
 - How can a robot policy learn new tasks while keeping its existing skills near perfect?
 - How do we build safety into robot policies as a first-class mechanism, one that stays installed through every later update?
+- What role should simulation play in training and evaluating robots?
