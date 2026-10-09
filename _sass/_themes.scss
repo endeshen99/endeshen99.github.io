@@ -282,3 +282,56 @@ body.sticky-bottom-footer {
     flex-shrink: 0;
   }
 }
+
+// Blog posts (the `.blog-post` class comes from the local _layouts/post.liquid
+// override): a 700px reading column, clear space under the date, section
+// headings at ~60% of the 40px title, a slightly larger lead line, and
+// figures that break out to ~820px on wide screens.
+.post.blog-post {
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+
+  .post-header {
+    margin-bottom: 2.5rem;
+  }
+
+  .post-content {
+    h2 {
+      font-size: 1.5rem;
+      margin-top: 2.25rem;
+    }
+
+    h3 {
+      font-size: 1.25rem;
+      margin-top: 1.75rem;
+    }
+
+    .post-lead {
+      font-size: 1.15rem;
+      line-height: 1.55;
+    }
+
+    .post-figure {
+      margin-bottom: 0.5rem;
+    }
+
+    .post-figure + .caption {
+      margin-bottom: 2rem;
+    }
+
+    @media (min-width: 900px) {
+      // The gem's JS gives #markdown-content `overflow: auto` (for wide
+      // tables), which would clip the breakout; wide screens don't need it.
+      #markdown-content {
+        overflow: visible;
+      }
+
+      .post-figure,
+      .post-figure + .caption {
+        margin-left: -60px;
+        margin-right: -60px;
+      }
+    }
+  }
+}

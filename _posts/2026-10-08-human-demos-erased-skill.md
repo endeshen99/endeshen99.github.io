@@ -9,9 +9,17 @@ giscus_comments: false
 related_posts: false
 ---
 
-## Same objective, different data, opposite outcome
+<div class="row post-figure">
+  <div class="col-sm mt-3 mt-md-0">
+    {% include figure.liquid loading="eager" path="assets/img/blog/csir_fig1_learning_curves.png" class="img-fluid rounded z-depth-1" zoomable=true %}
+  </div>
+</div>
+<div class="caption">
+  Success on the old task (moka pots) and the new task (bowl stacking) across fine-tuning steps. Left: trained on 50 human demonstrations. Right: trained on the policy's own successful rollouts. Figure 1 in the paper.
+</div>
 
 I fine-tuned a robot policy on a new task two ways, changing only where the training data came from. With 50 human demonstrations, it learned the new task and lost a skill it already had: success on the old task fell from 0.70 to 0.00. With its own successful attempts at the new task, it kept the old skill in every run.
+{: .post-lead}
 
 A robot that keeps improving after deployment has to learn new things without losing old ones. Recent work found that on-policy reinforcement learning (RL) forgets far less than supervised fine-tuning on vision-language-action (VLA) models. In language models, that difference has been traced to the data RL trains on, sampled from the model itself, rather than to the RL objective. I wanted to test that explanation on a robot policy.
 
@@ -45,15 +53,6 @@ Human demonstrations taught the new task and erased the old one. The policy's ow
 The old skill went to zero in every Demo run. It held or improved in all six Own runs. The same split held on two more new tasks, one closely related to the old task and one unrelated: demonstrations nearly erased the old skill (0.05 and 0.00), while the policy's own data kept it (0.69 and 0.71) but learned neither new task.
 
 The failures look like a lost motor skill rather than a forgotten task. The policy still reaches for the right moka pot, then closes the gripper late and lifts it in only 40% of attempts.
-
-<div class="row mt-3">
-  <div class="col-sm mt-3 mt-md-0">
-    {% include figure.liquid loading="eager" path="assets/img/blog/csir_fig1_learning_curves.png" class="img-fluid rounded z-depth-1" zoomable=true %}
-  </div>
-</div>
-<div class="caption">
-  Success on the old task (moka pots) and the new task (bowl stacking) across fine-tuning steps. Left: trained on 50 human demonstrations. Right: trained on the policy's own successful rollouts. Figure 1 in the paper.
-</div>
 
 ## Forgetting comes before learning
 
