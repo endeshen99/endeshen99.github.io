@@ -67,7 +67,7 @@ Under the policy's own data, the old skill stayed between 0.73 and 0.78 at every
 
 I expected RL on the new task to be the interesting arm. Its training curves looked promising: success on its own training rollouts rose from 0.25 in the first iteration to 0.61 in the last. But when I evaluated it the way the policy is actually deployed, the new task hadn't moved at all (0.35 before and after), and neither had the old one.
 
-The gap comes from sampling. RL on this kind of policy needs a noisy sampler during training so each action has a likelihood to optimize. Deployment decodes deterministically, without that noise. The two can disagree a lot: the starting policy succeeded on the old task 0.88 of the time under the training sampler, but 0.69 under deployment decoding.
+The gap comes from sampling. RL on this kind of policy needs a noisy sampler during training so each action has a likelihood to optimize. Deployment decodes deterministically, without that noise. The two can disagree a lot: the starting policy succeeded on the old task 0.88 of the time under the training sampler, but 0.70 under deployment decoding.
 
 One side effect I didn't predict: training on the policy's own successes nearly closed that gap. Afterward, old-task success was 0.84 under the training sampler and 0.80 under deployment decoding. Some of what the noisy sampler could do seems to carry over into the deterministic policy, though I don't yet know why.
 
@@ -85,7 +85,7 @@ But distance alone can't predict forgetting. After just 100 steps of demonstrati
 
 The policy's own data is a simple, safe ingredient, but it has a ceiling. It protected the old skill on all three new tasks, yet it can only teach what the policy already sometimes does, so it learned just one of the three new tasks, modestly.
 
-Replay works, and whose data you replay matters. Mixing the policy's own old-task successes into the demonstrations kept the old skill at 0.70 while learning as much as demonstrations alone. The same share of human demonstrations of the old task kept it only partly (0.59). My guess is that the policy's own rollouts carry the improved version of the skill, while the human demonstrations carry the version from before RL improved it.
+Replay works, and whose data is replayed matters. Mixing the policy's own old-task successes into the demonstrations kept the old skill at 0.70 while learning as much as demonstrations alone. The same share of human demonstrations of the old task kept it only partly (0.59). My guess is that the policy's own rollouts carry the improved version of the skill, while the human demonstrations carry the version from before RL improved it.
 
 Next, I want to test the data that sits in between: mostly the robot’s own behavior, with simulated human corrections only where it fails. Comparing those trajectories with pure human demonstrations would show whether data that stays close to what the policy already does can teach new tasks without erasing old ones. If the pattern above holds, corrections should learn faster than the policy’s own data while forgetting less than demonstrations.
 
