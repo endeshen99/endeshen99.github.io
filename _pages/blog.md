@@ -77,7 +77,7 @@ pagination:
 <p class="card-text">{{ post.description }}</p>
 
                     {% if post.external_source == blank %}
-                      {% assign read_time = post.content | number_of_words | divided_by: 180 | plus: 1 %}
+                      {% assign read_time = post.content | strip_html | number_of_words | divided_by: 180 | plus: 1 %}
                     {% else %}
                       {% assign read_time = post.feed_content | strip_html | number_of_words | divided_by: 180 | plus: 1 %}
                     {% endif %}
@@ -112,7 +112,7 @@ pagination:
     {% for post in postlist %}
 
     {% if post.external_source == blank %}
-      {% assign read_time = post.content | number_of_words | divided_by: 180 | plus: 1 %}
+      {% assign read_time = post.content | strip_html | number_of_words | divided_by: 180 | plus: 1 %}
     {% else %}
       {% assign read_time = post.feed_content | strip_html | number_of_words | divided_by: 180 | plus: 1 %}
     {% endif %}
@@ -141,8 +141,8 @@ pagination:
       </h3>
       <p>{{ post.description }}</p>
       <p class="post-meta">
-        {{ read_time }} min read &nbsp; &middot; &nbsp;
-        {{ post.date | date: '%B %d, %Y' }}
+        {{ post.date | date: '%B %-d, %Y' }} &nbsp; &middot; &nbsp;
+        {{ read_time }} min read
         {% if post.external_source %}
         &nbsp; &middot; &nbsp; {{ post.external_source }}
         {% endif %}
