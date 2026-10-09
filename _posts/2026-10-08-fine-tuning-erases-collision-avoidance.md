@@ -35,9 +35,9 @@ For language models, we already know benign updates can erode safety: fine-tunin
   <strong>The experiment, start to finish.</strong> A π0.5 policy trained to avoid obstacles (S1) is fine-tuned on obstacle-free demonstrations, then scored for both safety (does it still avoid obstacles?) and skill (does it still finish the task?). The replay and recovery setups come later in the post.
 </div>
 
-I started from a π0.5&nbsp;<a class="cite" href="#ref-4">[4]</a> policy released by LIBERO-Safety&nbsp;<a class="cite" href="#ref-2">[2]</a>, a benchmark that trained it on about 19,700 collision-free demonstrations to steer around obstacles on a tabletop. Call it the safe policy.
+I started from a π0.5&nbsp;<a class="cite" href="#ref-4">[4]</a> policy released by LIBERO-Safety&nbsp;<a class="cite" href="#ref-2">[2]</a>, a benchmark that trained it on about 19,700 collision-free demonstrations to steer around obstacles on a tabletop. I refer to this policy as the safe policy.
 
-Then I did what a company adapting the policy would do: fine-tuned it on 150 human demonstrations of three of the same tasks (a bowl, a book, and a moka-pot task), in their original scenes, which have no obstacles. Nothing in this data teaches the robot to collide. It just never shows an obstacle.
+I then fine-tuned it the way a team adapting the policy for deployment might: on 150 human demonstrations of three of the same tasks (bowl, book, and moka pot), recorded in their original scenes, which contain no obstacles. The data never teaches the robot to collide; it simply never shows an obstacle.
 
 I scored every checkpoint two ways on the same seeded episodes:
 
