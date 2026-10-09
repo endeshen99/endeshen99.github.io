@@ -322,6 +322,12 @@ body.sticky-bottom-footer {
       line-height: 1.55;
     }
 
+    .post-rule {
+      margin: 2rem 0;
+      border: 0;
+      border-top: 1px solid var(--global-divider-color);
+    }
+
     .post-figure {
       margin-bottom: 0.5rem;
     }

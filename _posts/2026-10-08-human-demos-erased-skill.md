@@ -11,14 +11,7 @@ related_posts: false
 
 <p class="post-tldr"><strong>TL;DR</strong> I fine-tuned a robot policy on a new task two ways, same objective and budget, changing only the data. Fifty human demonstrations taught the new task but erased a skill the policy already had, from 0.70 success to 0.00, within 200 steps and before the new task started improving. The policy's own successful rollouts kept the old skill in every run, and mixing a third of them into the demonstrations kept it at 0.70 while learning the new task just as well. Whose data you train on decides what the robot forgets.</p>
 
-<div class="row post-figure">
-  <div class="col-sm mt-3 mt-md-0">
-    {% include figure.liquid loading="eager" path="assets/img/blog/csir_fig1_learning_curves.png" class="img-fluid rounded z-depth-1" zoomable=true %}
-  </div>
-</div>
-<div class="caption">
-  Task success during supervised fine-tuning (SFT), measured at each training step. Orange is the old task, putting the moka pots on the stove; blue is the new task, stacking bowls. Left: trained on 50 human demonstrations. Right: trained on 143 of the policy's own successful rollouts. Bars are 95% confidence intervals.
-</div>
+<hr class="post-rule">
 
 A robot that keeps improving after deployment has to learn new things without losing old ones. Recent work found that on-policy reinforcement learning (RL) forgets far less than supervised fine-tuning on vision-language-action (VLA) models. In language models, that difference has been traced to the data RL trains on, sampled from the model itself, rather than to the RL objective. I wanted to test that explanation on a robot policy.
 
@@ -52,6 +45,15 @@ Human demonstrations taught the new task and erased the old one. The policy's ow
 The old skill went to zero in every Demo run. It held or improved in all six Own runs. The same split held on two more new tasks, one closely related to the old task and one unrelated: demonstrations nearly erased the old skill (0.05 and 0.00), while the policy's own data kept it (0.69 and 0.71) but learned neither new task.
 
 The failures look like a lost motor skill rather than a forgotten task. The policy still reaches for the right moka pot, then closes the gripper late and lifts it in only 40% of attempts.
+
+<div class="row post-figure">
+  <div class="col-sm mt-3 mt-md-0">
+    {% include figure.liquid loading="eager" path="assets/img/blog/csir_fig1_learning_curves.png" class="img-fluid rounded z-depth-1" zoomable=true %}
+  </div>
+</div>
+<div class="caption">
+  Task success during supervised fine-tuning (SFT), measured at each training step. Orange is the old task, putting the moka pots on the stove; blue is the new task, stacking bowls. Left: trained on 50 human demonstrations. Right: trained on 143 of the policy's own successful rollouts. Bars are 95% confidence intervals.
+</div>
 
 ## Forgetting comes before learning
 
