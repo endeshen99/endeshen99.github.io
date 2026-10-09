@@ -38,6 +38,5 @@ I did my B.S. and M.S. in Computer Science at Stanford, where I worked on text g
 
 #### on my mind
 
-- Can we tell from a VLA's internals what fine-tuning will erase before it happens?
-- If safety behaviors don't survive routine fine-tuning, what would make them durable, and how would we check that they did?
-- Should self-improvement methods be judged by a frozen benchmark score, or by how fast they improve under a fixed budget?
+- How can a robot policy learn new tasks while keeping its existing skills near perfect?
+- How do we build safety into robot policies as a first-class mechanism, one that stays installed through every later update?
