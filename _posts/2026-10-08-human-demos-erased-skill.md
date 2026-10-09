@@ -2,7 +2,7 @@
 layout: post
 title: Human demonstrations erased my robot's other skill. Its own data didn't.
 description: Fine-tuning a robot policy on a new task two ways, changing only where the training data came from.
-date: 2026-10-17 09:30:00-07:00
+date: 2026-10-08 09:00:00-07:00
 tags: robot-learning continual-learning fine-tuning
 categories: research
 giscus_comments: false
@@ -94,5 +94,3 @@ The obvious next data to try sits in between: mostly the robot's own behavior, w
 Limits: simulation only, one model family, one old skill tested against three new tasks, and single runs on two of those pairs. The old task also appears in the base model's training data, which may make it easier to retain than a skill the model never saw.
 
 *\[Your note: the next experiment you'd run.\]*
-
-*\[Link to the paper once it's public.\]*

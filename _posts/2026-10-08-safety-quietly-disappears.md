@@ -2,7 +2,7 @@
 layout: post
 title: Safety you train into a robot policy can quietly disappear
 description: Ordinary fine-tuning raised a robot policy's collision rate from 2.5% to 30.8% while it kept doing its tasks.
-date: 2026-10-17 09:00:00-07:00
+date: 2026-10-08 10:00:00-07:00
 tags: robot-learning safety fine-tuning
 categories: research
 giscus_comments: false
@@ -91,5 +91,3 @@ This is one base model, one benchmark, three fine-tuning tasks, and simulation o
 The question I'd most like to answer next: if safety behaviors don't survive routine fine-tuning, what would make them durable, and how would we check that they did?
 
 *\[Your note: the next experiment you'd run, and anything that surprised you along the way.\]*
-
-*\[Link to the paper once it's public.\]*
