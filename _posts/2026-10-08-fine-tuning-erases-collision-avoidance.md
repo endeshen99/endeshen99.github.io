@@ -2,7 +2,7 @@
 layout: post
 title: Fine-tuning on obstacle-free demos degrades a VLA's learned collision avoidance
 description: The results suggest this policy learned avoidance as a fragile motion habit and lacks a robust semantic concept of obstacles as hazards.
-og_image: /assets/img/blog/spais_fig5_filmstrips.png
+og_image: /assets/img/blog/spais_bowl_three_ways.png
 date: 2026-10-08 10:00:00-07:00
 tags: robot-learning safety fine-tuning
 categories: research
@@ -48,17 +48,17 @@ I scored every checkpoint two ways on the same seeded episodes:
 
 Fine-tuning raised the collision rate from 2.5% to 30.8% across 120 paired episodes. Safe success, meaning finishing the task without touching anything, fell from 85.8% to 26.7%.
 
-The bowl task shows it most cleanly, because its obstacle scene is the original scene plus one obstacle and nothing else. After fine-tuning, the robot still completed the bowl task 90% of the time, but its collision rate went from 0% to 25%. In the original scene, its skill was unchanged at 95%.
+The bowl task shows it most cleanly, because its obstacle scene keeps the original layout and adds an obstacle, with only a background cabinet rotated. After fine-tuning, the robot still completed the bowl task 90% of the time, but its collision rate went from 0% to 25%. In the original scene, its skill was unchanged at 95%.
 
 In one paired episode, both policies pick up the bowl and place it on the plate in about the same number of steps. The safe policy passes beside the obstacle. The fine-tuned one clips it on the way down. Same task, same success, different path.
 
 <div class="row post-figure">
   <div class="col-sm mt-3 mt-md-0">
-    {% include figure.liquid loading="eager" path="assets/img/blog/spais_fig5_filmstrips.png" class="img-fluid rounded z-depth-1" zoomable=true alt="Two filmstrips of a robot arm moving a bowl to a plate past a dark box. Top row, labeled S1: the safe policy passes beside the box. Bottom row, labeled Demo: the fine-tuned policy clips the box at step 97, outlined in red." %}
+    {% include figure.liquid loading="eager" path="assets/img/blog/spais_bowl_three_ways.png" class="img-fluid rounded z-depth-1" zoomable=true alt="Three filmstrips of a robot arm moving a bowl to a plate, four frames each at steps 0, 52, 102 and 156. Top, the safe policy in the obstacle scene: it passes beside a dark box and finishes with no contact. Middle, the fine-tuned policy in the original scene with no obstacle: it finishes the task. Bottom, the fine-tuned policy in the obstacle scene: at step 102, outlined in red, the carried bowl hits the box, and it still finishes the task." %}
   </div>
 </div>
 <div class="caption">
-  The same bowl episode under the safe policy (top, labeled S1) and after fine-tuning (bottom, labeled Demo). Both finish the task; only the fine-tuned policy clips the obstacle, at step 97.
+  The same bowl episode three ways: the safe policy in the obstacle scene (top), the fine-tuned policy in the original scene with no obstacle (middle), and the fine-tuned policy in the obstacle scene (bottom). The fine-tuned policy still completes the task, but now clips the obstacle at step 102. (The obstacle scene also rotates a background cabinet.)
 </div>
 
 On bowl, the robot didn't get worse at its job. It stopped doing the one thing nobody showed it during fine-tuning. Skill held on the book task too; the moka task was the exception, where the policy lost both its avoidance and its skill.
