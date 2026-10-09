@@ -22,6 +22,15 @@ Recent work found that on-policy reinforcement learning (RL) forgets far less th
 
 ## The setup
 
+<div class="row post-figure">
+  <div class="col-sm mt-3 mt-md-0">
+    {% include figure.liquid loading="eager" path="assets/img/blog/csir_fig2_design.png" class="img-fluid rounded z-depth-1" zoomable=true alt="Schematic of the experiment in three panels. Left, Start: a π0.5 policy after on-policy RL on the prior task of placing moka pots, with prior-task success 0.70 and new-task success 0.35. Middle: four fine-tuning versions from the same start. Three share one SFT setup and differ only in data: Own, the policy’s successful rollouts; Demo, 50 human demonstrations; Demo+Own, the demonstrations plus 17 of the policy’s own prior-task rollouts. The fourth, RL, uses on-policy GRPO with 320 rollouts as an objective ablation. Right, Evaluate: new-task success, prior-task success, and displacement from Start measured as action MSE." %}
+  </div>
+</div>
+<div class="caption">
+  <strong>The experiment.</strong> Every version starts from the same π0.5 policy, already improved by RL on the old task (moka pots), and is fine-tuned on a new task (stacking bowls) with the same training setup, changing only the data: the policy’s own successful rollouts (Own), 50 human demonstrations (Demo), or the demonstrations plus some of the policy’s own old-task successes (Demo+Own). RL on the new task is a comparison that changes the training objective instead. Each version is scored on both tasks, and on how far its actions moved from the starting policy.
+</div>
+
 The starting point is a π0.5&nbsp;<a class="cite" href="#ref-3">[3]</a> policy in the LIBERO&nbsp;<a class="cite" href="#ref-4">[4]</a> simulator that I had already improved with on-policy RL on one task: putting both moka pots on the stove. RL raised its success there from 0.55 to 0.70. That improved skill is what I wanted to protect.
 
 Next, I fine-tuned it on a new task, stacking one bowl on another and placing them in a tray, from a different scene. Every version used the same training loss, optimizer, step budget, and starting point. Only the training data changed:
