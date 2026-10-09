@@ -53,7 +53,7 @@ On bowl, the robot didn't get worse at its job. It stopped doing the one thing n
 
 The safety behavior is the first thing fine-tuning removes. On the static-obstacle scenes, the collision rate rose from 5% to 19.2% within the first 200 training steps, while task success barely moved (85% to 79.2%). Success only dropped later, by which point collisions had reached 42.5%.
 
-So a quick check of task success after fine-tuning would have looked fine. The safety loss is invisible unless you test for it specifically.
+So a quick check of task success after fine-tuning would have looked fine. The safety loss is invisible unless it is tested for specifically.
 
 I also tried simply telling the robot. Appending "avoiding the obstacles" to its instruction changed nothing: collisions went from 51.7% to 50%. In hindsight this makes sense. The safe policy's instructions never mentioned obstacles, so avoidance was never tied to language in the first place. It was a reaction to what the robot saw, and after fine-tuning it no longer reacts.
 

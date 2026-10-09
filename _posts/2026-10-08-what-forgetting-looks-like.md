@@ -32,11 +32,11 @@ Each checkpoint was scored on both tasks over the same seeded episodes, so every
 
 ## What happened
 
-Fifty human demonstrations taught the new task and erased the old one. Across runs, success on the new task rose from 0.35 to 0.71 while success on the old task fell from 0.70 to 0.00, and it hit zero in every demonstration run. The same objective on the policy's own successful rollouts kept the old skill in all six runs, which points to the data rather than the training loss. The rest of this post is about what the loss looked like.
+Fifty human demonstrations taught the new task and erased the old one. Across runs, success on the new task rose from 0.35 to 0.71 while success on the old task fell from 0.70 to 0.00, and it hit zero in every demonstration run. The same objective on the policy's own successful rollouts kept the old skill in all six runs, which points to the data rather than the training objective. The rest of this post is about what the loss looked like.
 
 | Training data | New task (bowls) | Old task (moka pots) |
 | --- | --- | --- |
-| Starting policy | 0.35 | 0.69 |
+| Starting policy | 0.35 | 0.70 |
 | RL | 0.35 | 0.73 |
 | Own | 0.41 | 0.77 |
 | Demo + Own | 0.69 | 0.70 |
@@ -44,7 +44,7 @@ Fifty human demonstrations taught the new task and erased the old one. Across ru
 
 The old skill went to zero in every Demo run. It held or improved in all six Own runs. The same split held on two more new tasks, one closely related to the old task and one unrelated: demonstrations nearly erased the old skill (0.05 and 0.00), while the policy's own data kept it (0.69 and 0.71) but learned neither new task.
 
-In one run I looked at closely, the failures looked less like a forgotten task than a lost motor skill: the policy still reached for the right moka pot, then closed the gripper late and rarely lifted it.
+In one run I looked at closely, the failures looked less like a forgotten task than a lost motor skill: the policy still reached for the right moka pot, then closed the gripper late and lifted it in only 40% of attempts.
 
 <div class="row post-figure">
   <div class="col-sm mt-3 mt-md-0">
@@ -72,8 +72,6 @@ The gap comes from sampling. RL on this kind of policy needs a noisy sampler dur
 One side effect I didn't predict: training on the policy's own successes nearly closed that gap. Afterward, old-task success was 0.84 under the training sampler and 0.80 under deployment decoding. Some of what the noisy sampler could do seems to carry over into the deterministic policy, though I don't yet know why.
 
 The practical lesson: training curves aren't evidence of improvement. Track a self-improving robot under the exact protocol it will be deployed with. My RL budgets were small, far below published RL fine-tuning of these models, so this says nothing about RL at scale. But it's what pushed me to hold the objective fixed and change only the data.
-
-*\[Your note: how this felt in the moment, and when you decided to reframe the project.\]*
 
 ## Distance from the start isn't the whole story
 
