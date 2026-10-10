@@ -48,6 +48,15 @@ I scored every checkpoint two ways on the same seeded episodes:
 
 Fine-tuning raised the collision rate from 2.5% to 30.8% across 120 paired episodes. Safe success, meaning finishing the task without touching anything, fell from 85.8% to 26.7%.
 
+<div class="row post-figure">
+  <div class="col-sm mt-3 mt-md-0">
+    {% include figure.liquid loading="eager" path="assets/img/blog/spais_fig2_per_task.png" class="img-fluid rounded z-depth-1" zoomable=true alt="Two bar charts comparing the safe policy S1 in dark grey with the policy after fine-tuning in orange, for the bowl, book and moka tasks. Left, obstacle scenes: episodes without obstacle contact fall from about 100% to 75% on bowl, 93% to 78% on book, and 100% to 55% on moka. Right, original scenes: task success stays near 95% on bowl, rises from about 65% to 95% on book, and falls from about 55% to 5% on moka. Error bars show 95% confidence intervals." %}
+  </div>
+</div>
+<div class="caption">
+  Safety and skill on each task, before (dark, the safe policy S1) and after fine-tuning on obstacle-free demonstrations (orange). Left: share of episodes in the obstacle scenes with no obstacle contact. Right: task success in the original scenes, without obstacles. Avoidance drops on every task, while skill holds on bowl and book and collapses on moka. Bars show 95% confidence intervals.
+</div>
+
 The bowl task shows it most cleanly, because its obstacle scene keeps the original layout and adds an obstacle, with only a background cabinet rotated. After fine-tuning, the robot still completed the bowl task 90% of the time, but its collision rate went from 0% to 25%. In the original scene, its skill was unchanged at 95%.
 
 In one paired episode, both policies pick up the bowl and place it on the plate in about the same number of steps. The safe policy passes beside the obstacle. The fine-tuned one clips it on the way down. Same task, same success, different path.
@@ -61,7 +70,7 @@ In one paired episode, both policies pick up the bowl and place it on the plate 
   The same bowl episode three ways: the safe policy in the obstacle scene (top), the fine-tuned policy in the original scene with no obstacle (middle), and the fine-tuned policy in the obstacle scene (bottom). The fine-tuned policy still completes the task, but now clips the obstacle at step 102. (The obstacle scene also rotates a background cabinet.)
 </div>
 
-On bowl, the robot didn’t get worse at its job. It stopped doing the one thing nobody showed it during fine-tuning. Skill held on the book task too. The moka task was the exception, where the policy lost both its avoidance and its skill, and that is likely partly a data problem. LIBERO’s demonstrations were recorded for a different controller than the one LIBERO-Safety uses, so I converted them, and the converted moka demonstrations succeeded only 28 of 50 times when replayed. After fine-tuning, the policy picks up a moka pot and then opens its gripper while the pot is still in the air.
+On bowl, the robot didn't get worse at its job. It stopped doing the one thing nobody showed it during fine-tuning. Skill held on the book task too; the moka task was the exception, where the policy lost both its avoidance and its skill.
 
 ## Avoidance goes first, and asking doesn't bring it back
 
@@ -69,7 +78,7 @@ The safety behavior is the first thing fine-tuning removes. On the static-obstac
 
 So a quick check of task success after fine-tuning would have looked fine. The safety loss is invisible unless it is tested for specifically.
 
-I also tried simply telling the robot. Appending "avoiding the obstacles" to the fine-tuned policy's instruction changed nothing: collisions went from 51.7% to 50%. In hindsight this makes sense. The safe policy's instructions never mentioned obstacles, in safety training or in my fine-tuning, so its avoidance was never tied to language in the first place. It was a learned reaction to what the robot saw, and once fine-tuning wore that reaction down, naming the hazard couldn't call it back. This doesn't show that language-conditioned safety would fail the same way; that was never trained here. Whether avoidance learned with instructions that mention obstacles survives fine-tuning better is an open question I'd like to test.
+I also tried telling the robot: appending "avoiding the obstacles" to the fine-tuned policy's instruction changed nothing, with collisions going from 51.7% to 50%. That makes sense in hindsight. The safe policy's instructions never mentioned obstacles, so its avoidance was a reaction to what it saw, not to language, and naming the hazard couldn't bring it back. Whether avoidance trained with instructions that mention obstacles would hold up better is an open question.
 
 ## Replay helps, and the loss is shallow
 
