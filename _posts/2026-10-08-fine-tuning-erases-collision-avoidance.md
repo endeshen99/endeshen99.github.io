@@ -61,7 +61,7 @@ In one paired episode, both policies pick up the bowl and place it on the plate 
   The same bowl episode three ways: the safe policy in the obstacle scene (top), the fine-tuned policy in the original scene with no obstacle (middle), and the fine-tuned policy in the obstacle scene (bottom). The fine-tuned policy still completes the task, but now clips the obstacle at step 102. (The obstacle scene also rotates a background cabinet.)
 </div>
 
-On bowl, the robot didn't get worse at its job. It stopped doing the one thing nobody showed it during fine-tuning. Skill held on the book task too; the moka task was the exception, where the policy lost both its avoidance and its skill.
+On bowl, the robot didn’t get worse at its job. It stopped doing the one thing nobody showed it during fine-tuning. Skill held on the book task too. The moka task was the exception, where the policy lost both its avoidance and its skill, and that is likely partly a data problem. LIBERO’s demonstrations were recorded for a different controller than the one LIBERO-Safety uses, so I converted them, and the converted moka demonstrations succeeded only 28 of 50 times when replayed. After fine-tuning, the policy picks up a moka pot and then opens its gripper while the pot is still in the air.
 
 ## Avoidance goes first, and asking doesn't bring it back
 

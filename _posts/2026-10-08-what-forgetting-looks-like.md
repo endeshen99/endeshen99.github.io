@@ -104,9 +104,9 @@ But distance alone can't predict forgetting. After just 100 steps of demonstrati
 
 ## What it means, limits, and what's next
 
-The policy's own data is a simple, safe ingredient, but it has a ceiling. It protected the old skill on all three new tasks, yet it can only teach what the policy already sometimes does, so it learned just one of the three new tasks, modestly.
+Training on the policy’s own successes protected the old skill on all three new tasks, but it has a clear ceiling: it can only reinforce what the policy already sometimes does. It learned just one of the three new tasks, and only modestly.
 
-Replay works, and whose data is replayed matters. Mixing the policy's own old-task successes into the demonstrations kept the old skill at 0.70 while learning as much as demonstrations alone. The same share of human demonstrations of the old task kept it only partly (0.59). My guess is that the policy's own rollouts carry the improved version of the skill, while the human demonstrations carry the version from before RL improved it.
+Replaying old data during training also helped, and whose data it was mattered. When I mixed some of the policy’s own old-task successes into the demonstrations, the old skill held at 0.70, and the new task was learned as well as with demonstrations alone. Mixing in the same share of human demonstrations of the old task kept only part of it (0.59). My guess is that the policy’s own rollouts capture the skill as RL improved it, while the human demonstrations capture it as it was before.
 
 Next, I want to test the data that sits in between: mostly the robot’s own behavior, with simulated human corrections only where it fails. Comparing those trajectories with pure human demonstrations would show whether data that stays close to what the policy already does can teach new tasks without erasing old ones. If the pattern above holds, corrections should learn faster than the policy’s own data while forgetting less than demonstrations.
 
