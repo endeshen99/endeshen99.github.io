@@ -69,7 +69,7 @@ The safety behavior is the first thing fine-tuning removes. On the static-obstac
 
 So a quick check of task success after fine-tuning would have looked fine. The safety loss is invisible unless it is tested for specifically.
 
-I also tried simply telling the robot. Appending "avoiding the obstacles" to its instruction changed nothing: collisions went from 51.7% to 50%. In hindsight this makes sense. The safe policy's instructions never mentioned obstacles, so avoidance was never tied to language in the first place. It was a reaction to what the robot saw, and after fine-tuning it no longer reacts.
+I also tried simply telling the robot. Appending "avoiding the obstacles" to the fine-tuned policy's instruction changed nothing: collisions went from 51.7% to 50%. In hindsight this makes sense. The safe policy's instructions never mentioned obstacles, in safety training or in my fine-tuning, so its avoidance was never tied to language in the first place. It was a learned reaction to what the robot saw, and once fine-tuning wore that reaction down, naming the hazard couldn't call it back. This doesn't show that language-conditioned safety would fail the same way; that was never trained here. Whether avoidance learned with instructions that mention obstacles survives fine-tuning better is an open question I'd like to test.
 
 ## Replay helps, and the loss is shallow
 
