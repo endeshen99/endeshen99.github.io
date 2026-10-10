@@ -79,7 +79,7 @@ Under the policy's own data, the old skill stayed between 0.73 and 0.78 at every
 
 I expected RL on the new task to be the interesting arm. Its training curves looked promising: success on its own training rollouts rose from 0.25 in the first iteration to 0.61 in the last. But when I evaluated it the way the policy is actually deployed, the new task hadn't moved at all (0.35 before and after), and neither had the old one.
 
-The gap comes from sampling. RL on this kind of policy needs a noisy sampler during training so each action has a likelihood to optimize. Deployment decodes deterministically, without that noise. The two can disagree a lot: the starting policy succeeded on the old task 0.88 of the time under the training sampler, but 0.70 under deployment decoding.
+The gap comes from how this policy picks actions. π0.5 is a flow-matching model: it produces each action by starting from random noise and refining it over a few steps, and at deployment that refinement is deterministic. RL needs something the deterministic version doesn’t give: the probability of each action the robot took, so it can make good actions more likely. πRL&nbsp;<a class="cite" href="#ref-5">[5]</a>, the method I used, gets around this by adding a little randomness at every refinement step during training. So the policy RL trains and scores is a noisier version of the one that gets deployed, and the two can behave quite differently: the starting policy succeeded on the old task 0.88 of the time with the training noise, but only 0.70 without it.
 
 One side effect I didn't predict: training on the policy's own successes nearly closed that gap. Afterward, old-task success was 0.84 under the training sampler and 0.80 under deployment decoding. Some of what the noisy sampler could do seems to carry over into the deterministic policy, though I don't yet know why.
 
@@ -87,11 +87,20 @@ The practical lesson: training curves aren't evidence of improvement. Track a se
 
 ## Distance from the start isn't the whole story
 
-In language models, how far fine-tuning shifts a model's output distribution from where it started (its KL divergence) predicts how much it forgets. I measured something similar for the robot: how different the fine-tuned policy's actions are from the starting policy's on the same observations.
+In language models, how far fine-tuning shifts a model's output distribution from where it started (its KL divergence) predicts how much it forgets.&nbsp;<a class="cite" href="#ref-2">[2]</a> I measured something similar for the robot: how different the fine-tuned policy's actions are from the starting policy's on the same observations.
 
 Across final checkpoints, distance separated the outcomes cleanly. Every checkpoint that moved far lost the old skill, and every one that stayed close kept it.
 
-But distance alone can't predict forgetting. After just 100 steps of demonstration training, the policy was about as close to the start as the final own-data policies, yet it had already lost most of the old skill (0.14 versus 0.77). Meanwhile, Demo + Own moved nearly twice as far as own data alone and kept the skill fully (0.70). Two updates at the same distance can differ in whether the old skill survives. What matters is the data.
+But distance alone can't predict forgetting. After just 100 steps of demonstration training, the policy was about as close to the start as the final own-data policies, yet it had already lost most of the old skill (0.14 versus 0.77). Meanwhile, Demo + Own moved nearly twice as far as own data alone and kept the skill fully (0.70). Two updates at the same distance can differ in whether the old skill survives. Something about the data matters beyond how far it moves the policy.
+
+<div class="row post-figure">
+  <div class="col-sm mt-3 mt-md-0">
+    {% include figure.liquid loading="eager" path="assets/img/blog/csir_fig3_prior_vs_displacement.png" class="img-fluid rounded z-depth-1" zoomable=true alt="Scatter plot of old-task success against displacement from the starting policy on a log scale. Own-data checkpoints cluster at moderate displacement with success near 0.7 to 0.8. Two Demo checkpoints at step 100 sit at similar displacement but near 0.15 success, marked with an arrow. Demo+Own sits farther right at about 0.6 to 0.7 success. Final Demo checkpoints sit far right at zero success. RL sits far left at about 0.7." %}
+  </div>
+</div>
+<div class="caption">
+  Old-task success against how far each checkpoint’s actions moved from the starting policy (log scale). Distance separates most outcomes, but not all: after 100 steps, demonstration training (Demo, step 100) is about as close to the start as the own-data runs, yet has already lost most of the skill, while demonstrations mixed with the policy’s own data (Demo+Own) move farther and keep it.
+</div>
 
 ## What it means, limits, and what's next
 
@@ -101,7 +110,7 @@ Replay works, and whose data is replayed matters. Mixing the policy's own old-ta
 
 Next, I want to test the data that sits in between: mostly the robot’s own behavior, with simulated human corrections only where it fails. Comparing those trajectories with pure human demonstrations would show whether data that stays close to what the policy already does can teach new tasks without erasing old ones. If the pattern above holds, corrections should learn faster than the policy’s own data while forgetting less than demonstrations.
 
-I’m also curious about scale. Recent work found that pretrained VLAs are surprisingly resistant to forgetting in continual learning,&nbsp;<a class="cite" href="#ref-5">[5]</a> yet here 50 demonstrations erased a skill within 200 steps. I’d like to measure directly how resistance to forgetting changes with the size of the pretrained model and the amount of pretraining.
+I’m also curious about scale. Recent work found that pretrained VLAs are surprisingly resistant to forgetting in continual learning,&nbsp;<a class="cite" href="#ref-6">[6]</a> yet here 50 demonstrations erased a skill within 200 steps. I’d like to measure directly how resistance to forgetting changes with the size of the pretrained model and the amount of pretraining.
 
 Limits: simulation only, one model family, one old skill tested against three new tasks, and single runs on two of those pairs. The old task also appears in the base model's training data, which may make it easier to retain than a skill the model never saw.
 
@@ -112,5 +121,6 @@ Limits: simulation only, one model family, one old skill tested against three ne
   <li id="ref-2">Shenfeld et al., “RL’s Razor: Why Online Reinforcement Learning Forgets Less”, arXiv 2025. <a href="https://arxiv.org/abs/2509.04259">arXiv:2509.04259</a></li>
   <li id="ref-3">Physical Intelligence, “π0.5: a Vision-Language-Action Model with Open-World Generalization”, arXiv 2025. <a href="https://arxiv.org/abs/2504.16054">arXiv:2504.16054</a></li>
   <li id="ref-4">Liu et al., “LIBERO: Benchmarking Knowledge Transfer for Lifelong Robot Learning”, NeurIPS 2023. <a href="https://arxiv.org/abs/2306.03310">arXiv:2306.03310</a></li>
-  <li id="ref-5">Liu et al., “Pretrained Vision-Language-Action Models are Surprisingly Resistant to Forgetting in Continual Learning”, arXiv 2026. <a href="https://arxiv.org/abs/2603.03818">arXiv:2603.03818</a></li>
+  <li id="ref-5">Chen et al., “πRL: Online RL Fine-tuning for Flow-based Vision-Language-Action Models”, arXiv 2025. <a href="https://arxiv.org/abs/2510.25889">arXiv:2510.25889</a></li>
+  <li id="ref-6">Liu et al., “Pretrained Vision-Language-Action Models are Surprisingly Resistant to Forgetting in Continual Learning”, arXiv 2026. <a href="https://arxiv.org/abs/2603.03818">arXiv:2603.03818</a></li>
 </ol>
