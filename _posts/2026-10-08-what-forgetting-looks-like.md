@@ -81,10 +81,6 @@ I expected RL on the new task to be the interesting arm. Its training curves loo
 
 The gap comes from how this policy picks actions. π0.5 is a flow-matching model: it produces each action by starting from random noise and refining it over a few steps, and at deployment that refinement is deterministic. RL needs something the deterministic version doesn’t give: the probability of each action the robot took, so it can make good actions more likely. πRL&nbsp;<a class="cite" href="#ref-5">[5]</a>, the method I used, gets around this by adding a little randomness at every refinement step during training. So the policy RL trains and scores is a noisier version of the one that gets deployed, and the two can behave quite differently: the starting policy succeeded on the old task 0.88 of the time with the training noise, but only 0.70 without it.
 
-One side effect I didn't predict: training on the policy's own successes nearly closed that gap. Afterward, old-task success was 0.84 under the training sampler and 0.80 under deployment decoding. Some of what the noisy sampler could do seems to carry over into the deterministic policy, though I don't yet know why.
-
-The practical lesson: training curves aren't evidence of improvement. Track a self-improving robot under the exact protocol it will be deployed with. My RL budgets were small, far below published RL fine-tuning of these models, so this says nothing about RL at scale. But it's what pushed me to hold the objective fixed and change only the data.
-
 ## Distance from the start isn't the whole story
 
 In language models, how far fine-tuning shifts a model's output distribution from where it started (its KL divergence) predicts how much it forgets.&nbsp;<a class="cite" href="#ref-2">[2]</a> I measured something similar for the robot: how different the fine-tuned policy's actions are from the starting policy's on the same observations.
@@ -93,7 +89,7 @@ Across final checkpoints, distance separated the outcomes cleanly. Every checkpo
 
 But distance alone can't predict forgetting. After just 100 steps of demonstration training, the policy was about as close to the start as the final own-data policies, yet it had already lost most of the old skill (0.14 versus 0.77). Meanwhile, Demo + Own moved nearly twice as far as own data alone and kept the skill fully (0.70). Two updates at the same distance can differ in whether the old skill survives. Something about the data matters beyond how far it moves the policy.
 
-<div class="row post-figure">
+<div class="row post-figure post-figure-narrow">
   <div class="col-sm mt-3 mt-md-0">
     {% include figure.liquid loading="eager" path="assets/img/blog/csir_fig3_prior_vs_displacement.png" class="img-fluid rounded z-depth-1" zoomable=true alt="Scatter plot of old-task success against displacement from the starting policy on a log scale. Own-data checkpoints cluster at moderate displacement with success near 0.7 to 0.8. Two Demo checkpoints at step 100 sit at similar displacement but near 0.15 success, marked with an arrow. Demo+Own sits farther right at about 0.6 to 0.7 success. Final Demo checkpoints sit far right at zero success. RL sits far left at about 0.7." %}
   </div>

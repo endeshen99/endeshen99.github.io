@@ -365,5 +365,19 @@ body.sticky-bottom-footer {
         margin-right: -60px;
       }
     }
+
+    // A narrower variant for small charts: no breakout, centered at ~480px.
+    .post-figure-narrow {
+      max-width: 480px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    @media (min-width: 900px) {
+      .post-figure-narrow {
+        margin-left: auto;
+        margin-right: auto;
+      }
+    }
   }
 }
