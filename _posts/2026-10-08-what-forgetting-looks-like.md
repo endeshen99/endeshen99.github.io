@@ -10,7 +10,7 @@ giscus_comments: false
 related_posts: false
 ---
 
-<p class="post-tldr"><strong>TL;DR</strong> I fine-tuned a robot policy on a new task with 50 human demonstrations and tracked a skill it already had. The old skill was gone before the new one arrived: its success fell from 0.70 to 0.14 after 100 steps and to 0.00 after 200, while the new task only began improving around step 1,060. Neither early stopping nor a lower learning rate could save it. Drift from the starting policy, the kind of measure that predicts forgetting in language models, didn’t catch the early loss either.</p>
+<p class="post-tldr"><strong>TL;DR</strong> I fine-tuned a robot policy on a new task with 50 human demonstrations and tracked a skill it already had. The old skill was gone before the new one arrived: its success fell from 0.70 to 0.14 after 100 steps and to 0.00 after 200, while the new task only began improving around step 1,060. Neither early stopping nor a lower learning rate could save it. Drift from the starting policy, the kind of measure that predicts forgetting in language models, didn’t catch the early loss.</p>
 
 <p class="post-tldr">In language models, on-policy RL forgets less than supervised fine-tuning (SFT), and the gap has been traced to the data rather than the algorithm. As a control, I ran SFT on the policy’s own successful rollouts. The same supervised updates didn’t erase the old skill this time, but they also barely improved the new task. This suggests on-policy data could be one ingredient in a training recipe with little forgetting, though what kind of on-policy data actually teaches remains open.</p>
 
