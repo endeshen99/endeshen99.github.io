@@ -5,4 +5,4 @@ inline: true
 related_posts: false
 ---
 
-_Data Source Decides Forgetting_ accepted at the CoRL 2026 Workshop on Continually Self-Improving Robots (CSIR). [PDF](/assets/pdf/shen2026datasource.pdf)
+_Data Source Decides Forgetting_ accepted at the [CoRL 2026 Workshop on Continually Self-Improving Robots (CSIR)](https://csircorl.github.io/website/). [PDF](/assets/pdf/shen2026datasource.pdf)
