@@ -7,3 +7,7 @@
 
 "Vision":
   color: "#009f36"
+
+"CoRL-W":
+  url: https://www.corl.org/
+  color: "#b5451b"

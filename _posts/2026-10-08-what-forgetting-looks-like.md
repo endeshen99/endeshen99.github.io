@@ -10,6 +10,8 @@ giscus_comments: false
 related_posts: false
 ---
 
+<p class="post-tldr"><strong>Update (Nov 2026)</strong> This work was accepted at the <a href="https://www.corl.org/">CoRL 2026</a> Workshop on Continually Self-Improving Robots (CSIR), Austin, Nov 12. The camera-ready paper, which adds a full-precision replication and the two extra task pairs, is here: <a href="/assets/pdf/shen2026datasource.pdf">Data Source Decides Forgetting (PDF)</a>.</p>
+
 <p class="post-tldr"><strong>TL;DR</strong> I fine-tuned a robot policy on a new task with 50 human demonstrations and tracked a skill it already had. The old skill was gone before the new one arrived: its success fell from 0.70 to 0.14 after 100 steps and to 0.00 after 200, while the new task only began improving around step 1,060. Neither early stopping nor a lower learning rate could save it. Drift from the starting policy, the kind of measure that predicts forgetting in language models, didn’t catch the early loss.</p>
 
 <p class="post-tldr">In language models, on-policy RL forgets less than supervised fine-tuning (SFT), and the gap has been traced to the data rather than the algorithm. As a control, I ran SFT on the policy’s own successful rollouts. The same supervised updates didn’t erase the old skill this time, but they also barely improved the new task. This suggests on-policy data could be one ingredient in a training recipe with little forgetting, though what kind of on-policy data actually teaches remains open.</p>
@@ -46,13 +48,13 @@ Each checkpoint was scored on both tasks over the same seeded episodes, so every
 
 Fifty human demonstrations taught the new task and erased the old one. Across runs, success on the new task rose from 0.35 to 0.71 while success on the old task fell from 0.70 to 0.00, and it hit zero in every demonstration run. The same objective on the policy's own successful rollouts kept the old skill in all six runs, which points to the data rather than the training objective. The rest of this post is about what the loss looked like.
 
-| Training data | New task (bowls) | Old task (moka pots) |
-| --- | --- | --- |
-| Starting policy | 0.35 | 0.70 |
-| RL | 0.35 | 0.73 |
-| Own | 0.41 | 0.77 |
-| Demo + Own | 0.69 | 0.70 |
-| Demo | 0.71 | 0.00 |
+| Training data   | New task (bowls) | Old task (moka pots) |
+| --------------- | ---------------- | -------------------- |
+| Starting policy | 0.35             | 0.70                 |
+| RL              | 0.35             | 0.73                 |
+| Own             | 0.41             | 0.77                 |
+| Demo + Own      | 0.69             | 0.70                 |
+| Demo            | 0.71             | 0.00                 |
 
 The old skill went to zero in every Demo run. It held or improved in all six Own runs. The same split held on two more new tasks, one closely related to the old task and one unrelated: demonstrations nearly erased the old skill (0.05 and 0.00), while the policy's own data kept it (0.69 and 0.71) but learned neither new task.
 

@@ -1,6 +1,20 @@
 ---
 ---
 
+@inproceedings{shen2026datasource,
+  abbr      = {CoRL-W},
+  title     = {Data Source Decides Forgetting: Self-Generated Rollouts vs. Human Demonstrations for a Flow-Matching {VLA}},
+  author    = {Shen, Ende},
+  booktitle = {Workshop on Continually Self-Improving Robots (CSIR) at the Conference on Robot Learning (CoRL)},
+  year      = {2026},
+  month     = {nov},
+  address   = {Austin, TX, USA},
+  pdf       = {shen2026datasource.pdf},
+  website   = {https://endeshen.com/blog/2026/what-forgetting-looks-like/},
+  abstract  = {Continually self-improving robots must acquire new skills without forgetting the ones they have. Recent work has shown that on-policy reinforcement learning (RL) forgets far less than supervised fine-tuning (SFT) when updating vision-language-action (VLA) models; for language models, this has been attributed to the data RL trains on, sampled from the model's own distribution, rather than to its objective. We test the effects of on-policy data on a flow-matching VLA (π0.5). Starting from a skill just improved by on-policy RL, we fine-tune on new tasks with SFT, holding everything fixed except the training data: successful rollouts of the policy itself, or human demonstrations. Across three new tasks, human demonstrations learn the new task but erase the prior skill, while the policy's own rollouts keep it on all three and modestly improve success on one of the new tasks. On one task pair, a full-precision replication shows that on-policy RL and SFT on the same rollouts learn the new task comparably and both keep the prior skill, while demonstrations erase it. Our results suggest that for flow-matching VLAs the data source, more than the objective, decides whether prior skills survive, and that SFT on the policy's own successes protects them.},
+  selected  = {true}
+}
+
 @inproceedings{zhang2023templm,
   abbr      = {ACL Findings},
   title     = {{TempLM}: Distilling Language Models into Template-Based Generators},
