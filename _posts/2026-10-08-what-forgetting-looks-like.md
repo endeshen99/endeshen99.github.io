@@ -11,7 +11,7 @@ giscus_comments: false
 related_posts: false
 ---
 
-<p class="post-tldr"><strong>Update (Nov 2026)</strong> This post was revised in November 2026 to match the camera-ready paper for the CoRL 2026 <a href="https://csircorl.github.io/website/">Workshop on Continually Self-Improving Robots (CSIR)</a>, Austin, Nov 12. The revision adds a full-precision replication, a measurement of how off-policy the demonstrations are, and a bf16 training defect found along the way. The camera-ready paper is here: <a href="/assets/pdf/shen2026datasource.pdf">Data Source Decides Forgetting (PDF)</a>.</p>
+<p class="post-tldr"><strong>Update (Nov 2026)</strong> This work was accepted at the CoRL 2026 <a href="https://csircorl.github.io/website/">Workshop on Continually Self-Improving Robots (CSIR)</a>, Austin, Nov 12. The post was revised to match the camera-ready paper, which adds a full-precision replication, a measurement of how off-policy the demonstrations are, and a bf16 training defect found along the way. The paper is here: <a href="/assets/pdf/shen2026datasource.pdf">Data Source Decides Forgetting (PDF)</a>.</p>
 
 <p class="post-tldr"><strong>TL;DR</strong> I fine-tuned a robot policy on a new task with 50 human demonstrations and tracked a skill it already had. The old skill was gone before the new one arrived: its success fell from 0.70 to 0.14 after 100 steps and to 0.00 after 200, while the new task only began improving around step 1,060. Neither early stopping nor a lower learning rate could save it. Drift from the starting policy, the kind of measure that predicts forgetting in language models, didn’t catch the early loss.</p>
 
@@ -19,9 +19,7 @@ related_posts: false
 
 <hr class="post-rule">
 
-A robotics founder once told me about a customer whose towel-folding robots were working well. The customer’s most urgent request was something the robots were never trained to do: spotting and setting aside towels that were slightly dirty. Requests like that are the norm once robots leave the lab: a model that went through extensive pretraining has to pick up small new skills quickly, without losing the ones it already has.
-
-Recent work found that on-policy reinforcement learning (RL) forgets far less than supervised fine-tuning on vision-language-action (VLA) models.&nbsp;<a class="cite" href="#ref-1">[1]</a> In language models, that difference has been traced to the data RL trains on, sampled from the model itself, rather than to the RL objective.&nbsp;<a class="cite" href="#ref-2">[2]</a> I wanted to look at this on a robot policy: I held the training objective fixed, changed only the data, and looked closely at how the forgetting unfolds.
+Once robots leave the lab, a model that went through extensive pretraining has to pick up small new skills quickly, without losing the ones it already has. Recent work found that on-policy reinforcement learning (RL) forgets far less than supervised fine-tuning on vision-language-action (VLA) models.&nbsp;<a class="cite" href="#ref-1">[1]</a> In language models, that difference has been traced to the data RL trains on, sampled from the model itself, rather than to the RL objective.&nbsp;<a class="cite" href="#ref-2">[2]</a> I wanted to look at this on a robot policy: I held the training objective fixed, changed only the data, and looked closely at how the forgetting unfolds.
 
 ## The setup
 
@@ -72,11 +70,11 @@ In one run I looked at closely, the failures looked less like a forgotten task t
 
 <div class="row post-figure">
   <div class="col-sm mt-3 mt-md-0">
-    {% include figure.liquid loading="eager" path="assets/img/blog/csir_fig1_learning_curves.png" class="img-fluid rounded z-depth-1" zoomable=true alt="Two line charts of task success against fine-tuning step. Left, trained on 50 human demonstrations: the old task drops from 0.7 to 0 within 200 steps while the new task rises to 0.7 by step 1590. Right, trained on 143 of the policy's own rollouts: the old task stays near 0.75 and the new task rises modestly to about 0.45." %}
+    {% include figure.liquid loading="eager" path="assets/img/blog/csir_fig1_learning_curves.png" class="img-fluid rounded z-depth-1" zoomable=true alt="Two line charts of task success against fine-tuning step. Left, trained on 50 human demonstrations: the old task drops from 0.7 to 0 within 200 steps while the new task rises to 0.7 by step 1590. Right, trained on 143 of the policy's own rollouts: the old task stays near 0.75 and the new task rises modestly to about 0.45. Circled points mark matched displacement from the starting policy: demonstrations at step 100 with d = 7.0, and the final own-rollout checkpoint with d = 8.1. Dotted lines show the starting policy's success on each task." %}
   </div>
 </div>
 <div class="caption">
-  Task success during supervised fine-tuning (SFT), measured at each training step. Orange is the old task, putting the moka pots on the stove; blue is the new task, stacking bowls. Left: trained on 50 human demonstrations. Right: trained on 143 of the policy's own successful rollouts. Bars are 95% confidence intervals.
+  Task success during supervised fine-tuning (SFT), measured at each training step. Orange is the old task, putting the moka pots on the stove; blue is the new task, stacking bowls. Left: trained on 50 human demonstrations. Right: trained on 143 of the policy's own successful rollouts. Bars are 95% confidence intervals. The circled points sit at about the same distance from the starting policy (d, action MSE ×10<sup>−3</sup>): demonstrations after 100 steps have already lost the old skill, while the own-rollout run at the end of training has kept it.
 </div>
 
 ## Forgetting comes before learning
@@ -85,7 +83,7 @@ Under human demonstrations, the old skill is gone before the new one arrives. Af
 
 That ordering rules out the obvious fixes. Stopping training early, once the new task looks good, can't help, because the old skill is already gone by then. A lower learning rate didn't help either: demonstration training at a fifth of the rate still erased the old skill and never got far enough to learn the new task.
 
-Under the policy's own data, the old skill stayed between 0.73 and 0.78 at every checkpoint, and the small new-task gain came in the second half of training.
+Under the policy's own data, the old skill stayed between 0.73 and 0.78 at every checkpoint, and the small new-task gain came in the second half of training. The old skill even ended a little above where it started in all six runs. My guess is that this comes from the sampler: the starting policy succeeds on the old task 0.88 of the time under the noisy training sampler but 0.70 under the deterministic one used at evaluation, and after training on its own successes the two nearly agree (0.84 and 0.80), as if the successes carried some of the sampler’s competence into the deterministic policy.
 
 ## A precision trap
 
@@ -110,20 +108,20 @@ This is the default in the RLinf and πRL configs (`precision: null`, no fp32 ma
 
 In language models, how far fine-tuning shifts a model's output distribution from where it started (its KL divergence) predicts how much it forgets.&nbsp;<a class="cite" href="#ref-2">[2]</a> I measured something similar for the robot: how different the fine-tuned policy's actions are from the starting policy's on the same observations.
 
-Across final checkpoints, distance separated the outcomes cleanly. Every checkpoint that moved far lost the old skill, and every one that stayed close kept it.
+Across final checkpoints on all three task pairs, distance separated the outcomes cleanly: every checkpoint displaced by more than 20 (action MSE, ×10<sup>−3</sup>) lost the old skill, every one below 15 kept it, and the only one in between, human-demonstration replay of the old task at 15.8, kept it partly (0.59).
 
 But distance alone can't predict forgetting. After just 100 steps of demonstration training, the policy was about as close to the start as the final own-data policies, yet it had already lost most of the old skill (0.14 versus 0.77). Meanwhile, Demo + Own moved nearly twice as far as own data alone and kept the skill fully (0.70). Two updates at the same distance can differ in whether the old skill survives. Something about the data matters beyond how far it moves the policy.
 
 <div class="row post-figure post-figure-narrow">
   <div class="col-sm mt-3 mt-md-0">
-    {% include figure.liquid loading="eager" path="assets/img/blog/csir_fig3_prior_vs_displacement.png" class="img-fluid rounded z-depth-1" zoomable=true alt="Scatter plot of old-task success against displacement from the starting policy on a log scale. Own-data checkpoints cluster at moderate displacement with success near 0.7 to 0.8. Two Demo checkpoints at step 100 sit at similar displacement but near 0.15 success, marked with an arrow. Demo+Own sits farther right at about 0.6 to 0.7 success. Final Demo checkpoints sit far right at zero success. RL sits far left at about 0.7." %}
+    {% include figure.liquid loading="eager" path="assets/img/blog/csir_fig3_prior_vs_displacement.png" class="img-fluid rounded z-depth-1" zoomable=true alt="Scatter plot of old-task success against displacement from the starting policy on a log scale. Three RL checkpoints sit far left, at displacement 0.2 to 1.5, with success 0.7 to 0.8. Own-data checkpoints cluster at displacement about 8 with success near 0.7 to 0.8, labeled Own, final. Two Demo checkpoints at step 100 sit at similar displacement but near 0.15 success, labeled Demo, step 100. Demo+Own sits farther right at about 0.6 to 0.7 success. Final Demo checkpoints sit far right, at displacement 30 to 45, at zero success, labeled Demo, final." %}
   </div>
 </div>
 <div class="caption">
   Old-task success against how far each checkpoint’s actions moved from the starting policy (log scale). Distance separates most outcomes, but not all: after 100 steps, demonstration training (Demo, step 100) is about as close to the start as the own-data runs, yet has already lost most of the skill, while demonstrations mixed with the policy’s own data (Demo+Own) move farther and keep it.
 </div>
 
-What differs about the data is how far its targets sit from what the policy would already do. For every frame in each training set, I gave the starting policy the set’s own observation and measured the mean squared error between the stored action chunk and the policy’s own prediction, in the units of the displacement metric above. For the human demonstrations the gap is 148.8 [143.4, 154.2]; for the policy’s own rollouts it is 30.1 [27.1, 32.9]. Part of each number is the policy’s own sampling noise, which puts a floor of 24.4 under the demonstrations and 15.8 under the rollouts. The demonstrations are about five times further off-policy on the mean and sixteen times on the median. The gripper accounts for 57% of the gap; on the six arm channels alone the numbers are 67.1 against 8.1, about eight times. And the gap is spread across all 50 demonstrations rather than concentrated in a few outliers. Demonstrations ask the policy to produce actions it would not produce on its own, and that is the difference the forgetting tracks.
+What differs about the data is how far its targets sit from what the policy would already do. For every frame in each training set, I gave the starting policy the set’s own observation and measured the mean squared error between the stored action chunk and the policy’s own prediction, in the units of the displacement metric above. For the human demonstrations the gap is 148.8 [143.4, 154.2]; for the policy’s own rollouts it is 30.1 [27.1, 32.9]. Part of each number is the policy’s own sampling noise, which puts a floor of 24.4 under the demonstrations and 15.8 under the rollouts. The demonstrations are about five times further off-policy on the mean and sixteen times on the median. The gap is concentrated in the middle of each episode, where the object is grasped and carried, and over half of it (57%) is gripper timing: the demonstrator closes earlier and holds longer than the policy does. Even on the six arm channels alone the numbers are 67.1 against 8.1, about eight times. The gap is spread across all 50 demonstrations rather than concentrated in a few outliers. That gripper offset also lines up with the failure I saw earlier: the erased skill breaks at exactly the point where the gripper should close. Demonstrations ask the policy to produce actions it would not produce on its own, and that is the difference the forgetting tracks.
 
 <div class="row post-figure post-figure-narrow">
   <div class="col-sm mt-3 mt-md-0">
@@ -139,6 +137,15 @@ What differs about the data is how far its targets sit from what the policy woul
 Training on the policy’s own successes protected the old skill on all three new tasks. It learns less than demonstrations do because it can only reinforce what the policy already sometimes does, and at full precision its gain on the new task matched RL’s while both kept the old skill.
 
 Replaying old data during training also helped, and whose data it was mattered. When I mixed some of the policy’s own old-task successes into the demonstrations, the old skill held at 0.70, and the new task was learned as well as with demonstrations alone. Mixing in the same share of human demonstrations of the old task kept only part of it (0.59). My guess is that the policy’s own rollouts capture the skill as RL improved it, while the human demonstrations capture it as it was before.
+
+<div class="row post-figure post-figure-narrow">
+  <div class="col-sm mt-3 mt-md-0">
+    {% include figure.liquid loading="eager" path="assets/img/blog/csir_replay_poster.png" class="img-fluid rounded z-depth-1" zoomable=true alt="Bar chart of old-task success at the final checkpoint for three training sets: the demonstrations alone, 0.00; the demonstrations plus 17 human demonstrations of the old task, 0.59; the demonstrations plus 17 of the policy's own old-task rollouts, 0.70. A dotted line marks the starting policy at about 0.70. Error bars are 95 percent intervals." %}
+  </div>
+</div>
+<div class="caption">
+  Old-task success at the end of training when the 50 demonstrations are mixed with replay of the old task: none, 17 human demonstrations of it, or 17 of the policy’s own successful rollouts of it. The dotted line is the starting policy. Bars are 95% confidence intervals.
+</div>
 
 Replay has a cost, though: it protects only what gets replayed. A robot with many skills would need old data for every one of them, and that cost grows with each skill it learns. Training on the policy’s own rollouts of the new task protected the old skill without any old-task data at all. If that holds across many skills, which I haven’t tested, its cost wouldn’t grow with the robot’s repertoire.
 
