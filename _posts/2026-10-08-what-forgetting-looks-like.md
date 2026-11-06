@@ -4,17 +4,18 @@ title: What forgetting looks like when a robot policy is fine-tuned on human dem
 description: A π0.5 policy lost a prior skill within 200 steps of fine-tuning on human demonstrations of a new task, well before it learned that task.
 og_image: /assets/img/blog/csir_fig1_learning_curves.png
 date: 2026-10-08 09:00:00-07:00
+last_updated: 2026-11-05
 tags: robot-learning continual-learning fine-tuning
 categories: research
 giscus_comments: false
 related_posts: false
 ---
 
-<p class="post-tldr"><strong>Update (Nov 2026)</strong> This work was accepted at the CoRL 2026 <a href="https://csircorl.github.io/website/">Workshop on Continually Self-Improving Robots (CSIR)</a>, Austin, Nov 12. The camera-ready paper, which adds a full-precision replication and the two extra task pairs, is here: <a href="/assets/pdf/shen2026datasource.pdf">Data Source Decides Forgetting (PDF)</a>.</p>
+<p class="post-tldr"><strong>Update (Nov 2026)</strong> This post was revised in November 2026 to match the camera-ready paper for the CoRL 2026 <a href="https://csircorl.github.io/website/">Workshop on Continually Self-Improving Robots (CSIR)</a>, Austin, Nov 12. The revision adds a full-precision replication, a measurement of how off-policy the demonstrations are, and a bf16 training defect found along the way. The original RL explanation in this post was wrong; see the new precision section below. The camera-ready paper is here: <a href="/assets/pdf/shen2026datasource.pdf">Data Source Decides Forgetting (PDF)</a>.</p>
 
 <p class="post-tldr"><strong>TL;DR</strong> I fine-tuned a robot policy on a new task with 50 human demonstrations and tracked a skill it already had. The old skill was gone before the new one arrived: its success fell from 0.70 to 0.14 after 100 steps and to 0.00 after 200, while the new task only began improving around step 1,060. Neither early stopping nor a lower learning rate could save it. Drift from the starting policy, the kind of measure that predicts forgetting in language models, didn’t catch the early loss.</p>
 
-<p class="post-tldr">In language models, on-policy RL forgets less than supervised fine-tuning (SFT), and the gap has been traced to the data rather than the algorithm. As a control, I ran SFT on the policy’s own successful rollouts. The same supervised updates didn’t erase the old skill this time, but they also barely improved the new task. This suggests on-policy data could be one ingredient in a training recipe with little forgetting, though what kind of on-policy data actually teaches remains open.</p>
+<p class="post-tldr">In language models, on-policy RL forgets less than supervised fine-tuning (SFT), and the gap has been traced to the data rather than the algorithm. As a control, I ran SFT on the policy’s own successful rollouts. The same supervised updates didn’t erase the old skill this time, but they improved the new task less than demonstrations did (+0.15 vs +0.50 at full precision). This suggests on-policy data could be one ingredient in a training recipe with little forgetting, though what kind of on-policy data actually teaches remains open.</p>
 
 <hr class="post-rule">
 
@@ -56,6 +57,15 @@ Fifty human demonstrations taught the new task and erased the old one. Across ru
 | Demo + Own      | 0.69             | 0.70                 |
 | Demo            | 0.71             | 0.00                 |
 
+| Full precision (fp32 master weights) | New task (bowls) | Old task (moka pots) |
+| ------------------------------------ | ---------------- | -------------------- |
+| Starting policy                      | 0.40             | 0.70                 |
+| RL/5it                               | 0.51             | 0.69                 |
+| Own                                  | 0.55             | 0.79                 |
+| Demo                                 | 0.90             | 0.05                 |
+
+The second table is a replication with full-precision training, explained below: the ordering is unchanged, and the Own and RL gains are now visible.
+
 The old skill went to zero in every Demo run. It held or improved in all six Own runs. The same split held on two more new tasks, one closely related to the old task and one unrelated: demonstrations nearly erased the old skill (0.05 and 0.00), while the policy's own data kept it (0.69 and 0.71) but learned neither new task.
 
 In one run I looked at closely, the failures looked less like a forgotten task than a lost motor skill: the policy still reached for the right moka pot, then closed the gripper late and lifted it in only 40% of attempts.
@@ -77,11 +87,24 @@ That ordering rules out the obvious fixes. Stopping training early, once the new
 
 Under the policy's own data, the old skill stayed between 0.73 and 0.78 at every checkpoint, and the small new-task gain came in the second half of training.
 
-## The surprise: RL gains that didn't show up at deployment
+## A precision trap
 
-I expected RL on the new task to be the interesting arm. Its training curves looked promising: success on its own training rollouts rose from 0.25 in the first iteration to 0.61 in the last. But when I evaluated it the way the policy is actually deployed, the new task hadn't moved at all (0.35 before and after), and neither had the old one.
+I expected RL on the new task to be the interesting condition. Its training curves looked good, but evaluated the way the policy is actually deployed, the new task hadn't moved (0.35 before and after). In the first version of this post I blamed the sampler. The real cause was simpler: most of the model was never able to change.
 
-The gap comes from how this policy picks actions. π0.5 is a flow-matching model: it produces each action by starting from random noise and refining it over a few steps, and at deployment that refinement is deterministic. RL needs something the deterministic version doesn’t give: the probability of each action the robot took, so it can make good actions more likely. πRL&nbsp;<a class="cite" href="#ref-5">[5]</a>, the method I used, gets around this by adding a little randomness at every refinement step during training. So the policy RL trains and scores is a noisier version of the one that gets deployed, and the two can behave quite differently: the starting policy succeeded on the old task 0.88 of the time with the training noise, but only 0.70 without it.
+Every run in the original study trained in bf16 with no fp32 copy of the weights. bf16 stores a number with only about three significant digits, so a weight of size 0.02 can only move in steps of roughly 0.0001. The optimizer's update at a learning rate of 5e-6 is far smaller than that, so each step rounds back to the old value and nothing accumulates. Only weights smaller than about 0.002 could move at all. In the action expert, that left 97.6% of the attention and MLP weights untouched from start to finish, in every condition. The training was real; it just happened in a small corner of the model.
+
+<div class="row post-figure post-figure-narrow">
+  <div class="col-sm mt-3 mt-md-0">
+    {% include figure.liquid loading="eager" path="assets/img/blog/csir_precision_poster.png" class="img-fluid rounded z-depth-1" zoomable=true alt="Bar chart of the fraction of the action expert's bf16 attention and MLP entries that changed during training, grouped by entry magnitude at Start, for RL after 15 iterations, the final Own checkpoint, and the final Demo checkpoint. Entries below 0.001 changed in 98 to 99 percent of cases, entries between 0.001 and 0.002 in 81 to 89 percent, and entries at or above 0.002, which is the 2 to the minus 9 cutoff, changed in none of the three conditions." %}
+  </div>
+</div>
+<div class="caption">
+  Fraction of the action expert’s bf16 attention and MLP entries that changed during training, by entry magnitude at the starting policy: no entry at or above 2<sup>−9</sup> moved in any condition.
+</div>
+
+I re-ran the three main conditions in full precision. Under that protocol the starting policy scores 0.40 on the new task and 0.70 on the old one; RL reaches 0.51 and 0.69, own-rollout SFT reaches 0.55 and 0.79, and demonstrations reach 0.90 and 0.05. The ordering is the same as before and the gaps are larger: RL and SFT on the same rollouts learn the same amount and both keep the old skill, while demonstrations learn more and erase it. The sampler mismatch I originally blamed is real but minor (the starting policy scores 0.88 on the old task with the training noise, 0.70 without).
+
+This is the default in the RLinf and πRL configs (`precision: null`, no fp32 master weights). If you fine-tune with either, check yours.
 
 ## Distance from the start isn't the whole story
 
@@ -100,9 +123,20 @@ But distance alone can't predict forgetting. After just 100 steps of demonstrati
   Old-task success against how far each checkpoint’s actions moved from the starting policy (log scale). Distance separates most outcomes, but not all: after 100 steps, demonstration training (Demo, step 100) is about as close to the start as the own-data runs, yet has already lost most of the skill, while demonstrations mixed with the policy’s own data (Demo+Own) move farther and keep it.
 </div>
 
+What differs about the data is how far its targets sit from what the policy would already do. For every frame in each training set, I gave the starting policy the set’s own observation and measured the mean squared error between the stored action chunk and the policy’s own prediction, in the units of the displacement metric above. For the human demonstrations the gap is 148.8 [143.4, 154.2]; for the policy’s own rollouts it is 30.1 [27.1, 32.9]. Part of each number is the policy’s own sampling noise, which puts a floor of 24.4 under the demonstrations and 15.8 under the rollouts. The demonstrations are about five times further off-policy on the mean and sixteen times on the median. The gripper accounts for 57% of the gap; on the six arm channels alone the numbers are 67.1 against 8.1, about eight times. And the gap is spread across all 50 demonstrations rather than concentrated in a few outliers. Demonstrations ask the policy to produce actions it would not produce on its own, and that is the difference the forgetting tracks.
+
+<div class="row post-figure post-figure-narrow">
+  <div class="col-sm mt-3 mt-md-0">
+    {% include figure.liquid loading="eager" path="assets/img/blog/csir_offpolicy_poster.png" class="img-fluid rounded z-depth-1" zoomable=true alt="Bar chart of chunk mean squared error from the starting policy for two training sets. Demo, 50 human demonstrations, is 148.8 with a resampling floor of 24.4; Own, 38 of the policy's own rollouts, is 30.1 with a resampling floor of 15.8. Error bars are 95 percent intervals and dashed lines mark the floors." %}
+  </div>
+</div>
+<div class="caption">
+  How far each training set’s action targets sit from the starting policy’s own actions on the same observations (mean chunk MSE, ×10<sup>−3</sup>, with 95% bootstrap intervals over episodes). Dashed lines are the resampling floor: the gap between two draws of the starting policy at the same frame.
+</div>
+
 ## What it means, limits, and what's next
 
-Training on the policy’s own successes protected the old skill on all three new tasks, but it has a clear ceiling: it can only reinforce what the policy already sometimes does. It learned just one of the three new tasks, and only modestly.
+Training on the policy’s own successes protected the old skill on all three new tasks. It learns less than demonstrations do because it can only reinforce what the policy already sometimes does, and at full precision its gain on the new task matched RL’s while both kept the old skill.
 
 Replaying old data during training also helped, and whose data it was mattered. When I mixed some of the policy’s own old-task successes into the demonstrations, the old skill held at 0.70, and the new task was learned as well as with demonstrations alone. Mixing in the same share of human demonstrations of the old task kept only part of it (0.59). My guess is that the policy’s own rollouts capture the skill as RL improved it, while the human demonstrations capture it as it was before.
 
