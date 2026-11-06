@@ -11,7 +11,7 @@ giscus_comments: false
 related_posts: false
 ---
 
-<p class="post-tldr"><strong>Update (Nov 2026)</strong> This post was revised in November 2026 to match the camera-ready paper for the CoRL 2026 <a href="https://csircorl.github.io/website/">Workshop on Continually Self-Improving Robots (CSIR)</a>, Austin, Nov 12. The revision adds a full-precision replication, a measurement of how off-policy the demonstrations are, and a bf16 training defect found along the way. The original RL explanation in this post was wrong; see the new precision section below. The camera-ready paper is here: <a href="/assets/pdf/shen2026datasource.pdf">Data Source Decides Forgetting (PDF)</a>.</p>
+<p class="post-tldr"><strong>Update (Nov 2026)</strong> This post was revised in November 2026 to match the camera-ready paper for the CoRL 2026 <a href="https://csircorl.github.io/website/">Workshop on Continually Self-Improving Robots (CSIR)</a>, Austin, Nov 12. The revision adds a full-precision replication, a measurement of how off-policy the demonstrations are, and a bf16 training defect found along the way. The camera-ready paper is here: <a href="/assets/pdf/shen2026datasource.pdf">Data Source Decides Forgetting (PDF)</a>.</p>
 
 <p class="post-tldr"><strong>TL;DR</strong> I fine-tuned a robot policy on a new task with 50 human demonstrations and tracked a skill it already had. The old skill was gone before the new one arrived: its success fell from 0.70 to 0.14 after 100 steps and to 0.00 after 200, while the new task only began improving around step 1,060. Neither early stopping nor a lower learning rate could save it. Drift from the starting policy, the kind of measure that predicts forgetting in language models, didn’t catch the early loss.</p>
 
