@@ -5,4 +5,4 @@ inline: true
 related_posts: false
 ---
 
-Won 2nd place at the Robot Safety Hackathon in San Francisco, hosted by Pantograph and Robocurve and judged by robotics researchers from OpenAI and Anthropic.
+Won 2nd place at the Robot Safety Hackathon in San Francisco, hosted by Pantograph and Robocurve and judged by robotics researchers from OpenAI and Anthropic (findings embargoed until 2027).
